@@ -1,0 +1,46 @@
+.my-container {
+    background-image: url("background.jpg");
+    min-height: 100vh;
+    display: flex;
+}
+
+.welcome-block {
+    margin: 15vh 15vh;
+}
+
+.main-welcome {
+    font-size: 55px;
+    margin: 20px 0;
+    text-transform: uppercase;
+    color: #00308F;
+}
+
+.sub-welcome {
+    font-size: 25px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    color: #00308F;
+}
+
+.hero-button {
+    padding: 17px 30px;
+    background-color: #00308F;
+    color: #ffffff;
+    font-weight: 600;
+    border: none;
+    margin: 30px 10px 0 0;
+    border-radius: 3px;
+    cursor: pointer;
+    box-shadow: 0 24px 36px -11px rgb(0 0 0 / 9%);
+    transition: 0.5s;
+}
+
+.hero-button i {
+    margin-left: 20px;
+}
+
+.hero-button:hover {
+    box-shadow: none;
+    color: #00308F;
+    background-color: #ffffff;
+}

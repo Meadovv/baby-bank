@@ -128,3 +128,13 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+#custom
+
+*/node_modules
+*/node_modules/*
+
+database
+database/*
+server/__pycache__
+server/__pycache__/*
