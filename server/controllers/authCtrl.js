@@ -221,6 +221,8 @@ let updateUser = async (req, res) => {
 
             user.updated = true
 
+            user.name = req.body.value.name
+
             user.phone.value = req.body.value.phone
             user.phone.private = req.body.value.phoneStatus === 'private'
 

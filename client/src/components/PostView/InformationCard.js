@@ -21,7 +21,7 @@ const distance = (userLat, userLng, postLat, postLng) => {
     const postRadiantLng = postLng * 0.01745329252
 
     const distance = (6378 * Math.acos(Math.sin(userRadianLat) * Math.sin(postRadiantLat) + Math.cos(userRadianLat) * Math.cos(postRadiantLat) * Math.cos(postRadiantLng - userRadiantLng)))
-    if(isNaN(distance)) {
+    if (isNaN(distance)) {
         return 0
     } else return Math.round(distance)
 }
@@ -71,8 +71,9 @@ const InformationCard = ({ allowAction, post }) => {
                 }}>{post?.ownerName}</h2>
                 <Tag color="geekblue" style={{ fontSize: 20, height: 30, padding: 5, margin: 10, borderColor: 'blue' }}>
                     {
-                        post?.mode === 'individual' ? 'Cá nhân' :
-                            post?.mode === 'hospital' ? 'Bệnh viện' : 'Tổ chức'
+                        post.mode === "individual" ? "Người dùng" :
+                            post.mode === "organization" ? "Tổ chức" :
+                                post.mode === "hospital" ? "Bệnh viện" : "Quản trị viên"
                     }
                 </Tag>
                 <div><i className="fa-solid fa-people-arrows fa-xl" /> - {distance(user?.location?.lat, user?.location?.lng, post?.lat, post?.lng)} km</div>
@@ -87,7 +88,7 @@ const InformationCard = ({ allowAction, post }) => {
                                 post?.mode === 'individual' ? <RequestUserModal post={post} /> :
                                     post?.mode === 'hospital' ? <RequestHospitalModal post={post} /> : <DonationModal post={post} />
                             }
-                            <ReportModal type='post' id={post?._id}/>
+                            <ReportModal type='post' id={post?._id} />
                         </>
                 }
                 {
@@ -102,8 +103,8 @@ const InformationCard = ({ allowAction, post }) => {
                             <Button type='primary' size='large' ghost danger={post?.active} onClick={() => {
 
                             }}>{
-                                post?.active ? 'Hủy kích hoạt' : 'Kích hoạt'
-                            }</Button>
+                                    post?.active ? 'Hủy kích hoạt' : 'Kích hoạt'
+                                }</Button>
                         </Space> :
                         <></>
                 }

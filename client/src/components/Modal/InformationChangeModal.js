@@ -51,6 +51,7 @@ const ReportFormInModal = ({ user, open, onCreate, onCancel }) => {
     const [form] = Form.useForm()
 
     const initialValues = {
+        name: user?.name,
         phone: user?.phone.value,
         email: user?.email.value,
         address: user?.location.address,
@@ -85,6 +86,19 @@ const ReportFormInModal = ({ user, open, onCreate, onCancel }) => {
                 initialValues={initialValues}
                 layout='vertical'
             >
+                <Form.Item
+                    label='Tên hiển thị'
+                    name='name'
+                    rules={[{ required: true, message: 'Cần có' }]}
+                    style={{
+                        display: 'inline-block',
+                        width: '100%',
+                        padding: 5
+                    }}
+                >
+                    <Input />
+                </Form.Item>
+
                 <Form.Item
                     label='Điện thoại'
                     name='phone'
