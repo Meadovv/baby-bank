@@ -19,9 +19,9 @@ const PostCard = ({ post, width }) => {
                     post.mode === "organization" ? "Tổ chức" : 
                         post.mode === "hospital" ? "Bệnh viện" : "Quản trị viên"
 
-    const imageLink = post.mode === "individual" ? "/images/post/individual.png" :
+    const imageLink = post.mode === "individual" ? (Number(post.amount) !== -1 ? "/images/post/milk-donation.png" : "/images/post/thing-donation.png") :
                         post.mode === "organization" ? "/images/post/organization.png" :
-                            post.mode === "hospital" ? "/images/post/organization.png" : "/images/post/admin.jpg"
+                            post.mode === "hospital" ? "/images/post/hospital.png" : "/images/post/admin.jpg"
 
     return (
         <Col span={width}>

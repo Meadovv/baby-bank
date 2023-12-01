@@ -27,11 +27,15 @@ const options = [
         value: 'milk'
     },
     {
-        label: 'Ủng hộ',
+        label: 'Cho đồ dùng',
+        value: 'no-milk'
+    },
+    {
+        label: 'Tổ chức',
         value: 'donation'
     },
     {
-        label: 'Kiến thức',
+        label: 'Bệnh viện',
         value: 'knowledge'
     },
     {

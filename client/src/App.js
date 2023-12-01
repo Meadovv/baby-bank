@@ -23,6 +23,7 @@ import StorageManage from './pages/StorageManage/StorageManage'
 import EditPost from './pages/EditPost/EditPost'
 import AdminHome from './pages/Admin/AdminHome'
 import AdminChat from './pages/Admin/AdminChat'
+import AdminReport from './pages/Admin/AdminReport'
 
 function App() {
 
@@ -105,6 +106,10 @@ function App() {
 
             <Route path='/admin-chat' element={
               <ProtectedRoute admin={true} children={<AdminChat />}/>
+            }/>
+
+            <Route path='/admin-report' element={
+              <ProtectedRoute admin={true} children={<AdminReport />}/>
             }/>
           </Routes>
         }

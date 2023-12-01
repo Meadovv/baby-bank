@@ -49,6 +49,7 @@ let getUserPost = async (req, res) => {
                 user: post.ownerName,
                 mode: post.mode,
                 title: post.title,
+                amount: post.amount,
                 time: post.createDate
             })
         })
@@ -87,14 +88,25 @@ let getAllPost = async (req, res) => {
             active: true
         }
     } else {
-        findKey = {
-            active: true,
-            mode: req.body.type === 'milk' ? 'individual' : req.body.type === 'donation' ? 'organization' : req.body.type === 'knowledge' ? 'hospital' : 'admin'
+        if(req.body.type === 'no-milk') {
+            findKey = {
+                active: true,
+                mode: 'individual'
+            }
+        } else {
+            findKey = {
+                active: true,
+                mode: req.body.type === 'milk' ? 'individual' : req.body.type === 'donation' ? 'organization' : req.body.type === 'knowledge' ? 'hospital' : 'admin'
+            }
         }
     }
 
     if (req.body.type === 'milk') {
         findKey['amount'] = { $gt: req.body.min }
+    }
+
+    if (req.body.type === 'no-milk') {
+        findKey['amount'] = -1
     }
 
     findKey['ownerId'] = { $ne: req.body.userId }
@@ -121,6 +133,7 @@ let getAllPost = async (req, res) => {
                         user: post.ownerName,
                         mode: post.mode,
                         title: post.title,
+                        amount: post.amount,
                         time: post.createDate
                     })
                 })

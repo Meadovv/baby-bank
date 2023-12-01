@@ -28,11 +28,35 @@ const ChatDrawer = () => {
 
     const showDrawer = () => {
         setOpen(true);
-    };
+    }
 
     const closeDrawer = () => {
         setOpen(false);
-    };
+    }
+
+    const loadHistory = async () => {
+        setLoading(true)
+        await axios.post('/api/v1/chat/load-history',
+        {
+
+        },
+        {
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem('token')
+            },
+        }).then(res => {
+            setMessageList(res.data.message)
+        }).catch(err => {
+            setMessageList([
+                {
+                    key: Date.now(),
+                    role: 'bot',
+                    content: err.message
+                }
+            ])
+        })
+        setLoading(false)
+    }
 
     const getAnswer = async (question) => {
         if(question.length === 0) {
@@ -49,8 +73,8 @@ const ChatDrawer = () => {
         setLoading(true)
         await axios.post(`${
             mode === 'assistant' ?
-            '/api/v1/function/assistant/get-answer' :
-            '/api/v1/function/send-report'
+            '/api/v1/assistant/get-answer' :
+            '/api/v1/chat/send-chat'
         }`,
             {
                 question: question,
@@ -86,21 +110,11 @@ const ChatDrawer = () => {
 
     const changeMode = (value) => {
         setMode(value)
-        setMessageList([
-            {
-                key: Date.now(),
-                role: 'bot',
-                content: `Bạn đang ở chế độ ${value === 'assistant' ? 'Trợ lí Warm Milk' : 'Trò chuyện'}`
-            },
-            {
-                key: Date.now() + 1,
-                role: 'bot',
-                content: `${value === 'assistant' ? 
-                    'Xin chào, tôi là trợ lí Warm Milk. Hãy hỏi tôi bất cứ điều gì liên quan tới mẹ và bé, tôi sẽ cố gắng tìm câu trả lời. Tuy nhiên, câu trả lời của tôi chỉ mang tính chất tham khảo. Ngoài ra, bạn có thể chuyển sang chế độ báo cáo bằng cách nhấn vào Nút Báo cáo.' : 
-                    'Xin chào, bạn đang trong chế độ Trò chuyện. Chúng tôi rất vui khi nhận được đóng góp của bạn.'
-                }`
-            }
-        ])
+        if(value === 'assistant') {
+            setMessageList(initiationChat)
+        } else {
+            loadHistory()
+        }
     }
 
     useEffect(() => {
@@ -176,7 +190,7 @@ const ChatDrawer = () => {
                     marginTop: 10
                 }}>
                     <Button type='primary' size='large' ghost onClick={() => {
-                            changeMode(mode === 'assistant' ? 'report' : 'assistant')
+                            changeMode(mode === 'assistant' ? 'chat' : 'assistant')
                     }}>
                         {
                             mode === 'assistant' ? 'Trò chuyện' : 'Trợ lí'

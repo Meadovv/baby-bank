@@ -26,11 +26,15 @@ const Navigator = () => {
           url: '/post?type=milk&distance=0'
         },
         {
-          title: 'Từ thiện',
+          title: 'Cho đồ',
+          url: '/post?type=no-milk&distance=0'
+        },
+        {
+          title: 'Tổ chức',
           url: '/post?type=donation&distance=0'
         },
         {
-          title: 'Kiến thức',
+          title: 'Bệnh viện',
           url: '/post?type=knowledge&distance=0'
         }
       ]
@@ -66,6 +70,10 @@ const Navigator = () => {
     {
       title: 'Tin nhắn',
       url: '/admin-chat'
+    },
+    {
+      title: 'Báo cáo',
+      url: '/admin-report'
     },
     {
       title: 'Tài khoản',

@@ -24,11 +24,13 @@ app.use('/api/v1/request', require('./routes/requestRoute'))
 app.use('/api/v1/appointment', require('./routes/appointmentRoute'))
 app.use('/api/v1/notification', require('./routes/notificationRoute'))
 app.use('/api/v1/storage', require('./routes/storageRoute'))
+app.use('/api/v1/assistant', require('./routes/assistantRoute'))
+app.use('/api/v1/chat', require('./routes/chatRoute'))
+app.use('/api/v1/admin', require('./routes/adminRoute'))
 
 app.use('/api/v1/function', require('./routes/reportRoutes'))
 app.use('/api/v1/function', require('./routes/publicRoute'))
 app.use('/api/v1/function', require('./routes/listRoute'))
-app.use('/api/v1/function/assistant', require('./routes/assistantRoute'))
 
 app.get('/', (req, res) => {
     res.status(200).send({

@@ -70,6 +70,7 @@ const getNewPost = async (req, res) => {
                     user: post.ownerName,
                     mode: post.mode,
                     title: post.title,
+                    amount: post.amount,
                     time: post.createDate
                 })
             })
@@ -92,6 +93,113 @@ const getNewPost = async (req, res) => {
 const getNewAdminPost = async (req, res) => {
     await postModel.find({
         mode: 'admin',
+        active: true
+    }).limit(6).sort({ createDate: -1 })
+    .then(posts => {
+        let postList = []
+
+        posts.forEach(post => {
+            postList.push({
+                _id: post._id,
+                active: post.active,
+                user: post.ownerName,
+                mode: post.mode,
+                title: post.title,
+                amount: post.amount,
+                time: post.createDate
+            })
+        })
+
+        res.status(200).send({
+            success: true,
+            message: 'Lấy bài đăng thành công',
+            postList: postList
+        })
+    })
+    .catch(err => {
+        console.log(err)
+        res.status(500).send({
+            success: false,
+            message: err.message
+        })
+    })
+}
+
+const getNewIndividualMilkPost = async (req, res) => {
+    await postModel.find({
+        mode: 'individual',
+        amount: {$ne: -1},
+        active: true
+    }).limit(6).sort({ createDate: -1 })
+    .then(posts => {
+        let postList = []
+
+        posts.forEach(post => {
+            postList.push({
+                _id: post._id,
+                active: post.active,
+                user: post.ownerName,
+                mode: post.mode,
+                title: post.title,
+                amount: post.amount,
+                time: post.createDate
+            })
+        })
+
+        res.status(200).send({
+            success: true,
+            message: 'Lấy bài đăng thành công',
+            postList: postList
+        })
+    })
+    .catch(err => {
+        console.log(err)
+        res.status(500).send({
+            success: false,
+            message: err.message
+        })
+    })
+}
+
+const getNewIndividualNoMilkPost = async (req, res) => {
+    await postModel.find({
+        mode: 'individual',
+        amount: -1,
+        active: true
+    }).limit(6).sort({ createDate: -1 })
+    .then(posts => {
+        let postList = []
+
+        posts.forEach(post => {
+            postList.push({
+                _id: post._id,
+                active: post.active,
+                user: post.ownerName,
+                mode: post.mode,
+                title: post.title,
+                amount: post.amount,
+                time: post.createDate
+            })
+        })
+
+        res.status(200).send({
+            success: true,
+            message: 'Lấy bài đăng thành công',
+            postList: postList
+        })
+    })
+    .catch(err => {
+        console.log(err)
+        res.status(500).send({
+            success: false,
+            message: err.message
+        })
+    })
+}
+
+const getNewOrganizationPost = async (req, res) => {
+    await postModel.find({
+        mode: 'organization',
         active: true
     }).limit(6).sort({ createDate: -1 })
     .then(posts => {
@@ -161,5 +269,8 @@ module.exports = {
     getInformation,
     getNewPost,
     getNewAdminPost,
-    getNewHospitalPost
+    getNewHospitalPost,
+    getNewIndividualMilkPost,
+    getNewIndividualNoMilkPost,
+    getNewOrganizationPost
 }

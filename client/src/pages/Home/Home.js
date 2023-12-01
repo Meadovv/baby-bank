@@ -31,9 +31,24 @@ const Home = () => {
                 getLink={'/api/v1/function/get-new-post'}
             />
             <Recommend  
-                title={"Kiến thức hữu ích"} 
+                title={"Bài viết cho sữa"} 
+                seeMore={'/post?type=milk&distance=0'} 
+                getLink={'/api/v1/function/get-individual-milk-new-post'}
+            />
+            <Recommend  
+                title={"Bài viết cho đồ dùng"} 
+                seeMore={'/post?type=no-milk&distance=0'} 
+                getLink={'/api/v1/function/get-individual-no-milk-new-post'}
+            />
+            <Recommend  
+                title={"Bài viết của bệnh viện"} 
                 seeMore={'/post?type=knowledge&distance=0'} 
                 getLink={'/api/v1/function/get-hospital-new-post'}
+            />
+            <Recommend  
+                title={"Bài viết của tổ chức"} 
+                seeMore={'/post?type=donation&distance=0'} 
+                getLink={'/api/v1/function/get-organization-new-post'}
             />
             <Recommend  
                 title={"THÔNG BÁO TỪ QUẢN TRỊ VIÊN"} 
