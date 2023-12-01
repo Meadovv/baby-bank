@@ -25,6 +25,8 @@ import AdminHome from './pages/Admin/AdminHome'
 import AdminChat from './pages/Admin/AdminChat'
 import AdminReport from './pages/Admin/AdminReport'
 
+import Terms from './pages/Terms/Terms'
+
 function App() {
 
   const { loading } = useSelector(state => state.alerts)
@@ -98,6 +100,10 @@ function App() {
 
             <Route path='*' element={
               <Error />
+            }/>
+
+            <Route path='/terms-of-use' element={
+              <Terms />
             }/>
 
             <Route path='/admin' element={
