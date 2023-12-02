@@ -164,6 +164,11 @@ let createPost = async (req, res) => {
         const newPost = postModel(req.body.post)
         newPost.createDate = Date.now()
         newPost.active = true
+
+        if(Number(req.body.post.amount)) {
+            newPost.title = 'Bài đăng cho sữa'
+        }
+
         await newPost.save()
 
         res.status(200).send({

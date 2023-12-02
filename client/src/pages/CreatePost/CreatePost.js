@@ -94,7 +94,7 @@ const CreatePost = () => {
         mode: user?.mode,
         ownerId: user?._id,
         ownerName: user?.name,
-        title: user?.mode === 'individual' ? 'Bài đăng cho sữa' : '',
+        title: '',
         content: [],
         amount: 1000,
         lat: user?.location.lat,
