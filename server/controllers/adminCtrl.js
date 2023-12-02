@@ -44,6 +44,74 @@ const loadUserChatList = async (req, res) => {
     })
 }
 
+const getUserList = async (req, res) => {
+
+    let findKey = {
+        mode: {$ne: 'admin'}
+    }
+
+    if(req.body.key.length === 24) {
+        findKey['_id'] = req.body.key
+    }
+
+    await userModel.find(findKey)
+    .then(users => {
+
+        let userList = []
+        users.forEach(user => {
+            userList.push({
+                _id: user._id,
+                name: user.name,
+                username: user.username,
+                active: user.active,
+                mode: user.mode
+            })
+        })
+
+        res.status(200).send({
+            success: true,
+            userList: userList
+        })
+    })
+    .catch(err => {
+        console.log(err)
+        res.status(500).send({
+            success: false,
+            message: err.message
+        })
+    })
+}
+
+const accountSetting = async (req, res) => {
+    await userModel.findById({
+        _id: req.body._id
+    }).then(async (user) => {
+        if(user) {
+            user[req.body.key] = req.body.value
+
+            await user.save()
+
+            res.status(200).send({
+                success: true,
+                message: 'Thay đổi thành công'
+            })
+        } else {
+            res.status(200).send({
+                success: false,
+                message: 'Không tìm thấy người dùng'
+            })
+        }
+    }).catch(err => {
+        console.log(err)
+        res.status(500).send({
+            success: false,
+            message: err.message
+        })
+    })
+}
+
 module.exports = {
     loadUserChatList,
+    getUserList,
+    accountSetting
 }

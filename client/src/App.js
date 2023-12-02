@@ -26,6 +26,7 @@ import AdminChat from './pages/Admin/AdminChat'
 import AdminReport from './pages/Admin/AdminReport'
 
 import Terms from './pages/Terms/Terms'
+import AdminAccountManager from './pages/Admin/AdminAccountManager'
 
 function App() {
 
@@ -116,6 +117,10 @@ function App() {
 
             <Route path='/admin-report' element={
               <ProtectedRoute admin={true} children={<AdminReport />}/>
+            }/>
+
+            <Route path='/admin-account-manager' element={
+              <ProtectedRoute admin={true} children={<AdminAccountManager />} />
             }/>
           </Routes>
         }

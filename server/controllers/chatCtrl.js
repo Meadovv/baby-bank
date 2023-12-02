@@ -11,23 +11,25 @@ const loadHistory = async (req, res) => {
                 to: req.body.targetId ? req.body.targetId : req.body.userId
             }
         ]
-    }).then(records => {
+    }).then(async (records) => {
         let message = []
-        records.forEach(record => {
-            if(record.to === req.body.userId) {
+        for(let i = 0; i < records.length; ++i) {
+            if(records[i].to === req.body.userId) {
                 message.push({
-                    key: record.createDate,
+                    key: records[i].createDate,
                     role: 'bot',
-                    content: record.message
+                    content: records[i].message
                 })
             } else {
                 message.push({
-                    key: record.createDate,
+                    key: records[i].createDate,
                     role: 'user',
-                    content: record.message
+                    content: records[i].message
                 })
             }
-        })
+            records[i].status = 'read'
+            await records[i].save()
+        }
 
         res.status(200).send({
             success: true,
@@ -45,7 +47,7 @@ const sendChat = async (req, res) => {
 
     const newChat = new chatModel({
         from: req.body.userId,
-        to: '000000000000000000000000',
+        to: req.body.to,
         message: req.body.question,
         status: 'unread',
         createDate: Date.now()

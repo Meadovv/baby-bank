@@ -78,8 +78,7 @@ const ChatDrawer = () => {
         }`,
             {
                 question: question,
-                to: 'bot',
-                type: 'bot'
+                to: '000000000000000000000000'
             },
             {
                 headers: {

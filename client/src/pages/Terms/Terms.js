@@ -326,6 +326,11 @@ const Terms = () => {
                 }}>
                     <strong>4. </strong> BabyBank là kênh trung gian hỗ trợ mọi người trao đổi sữa mẹ, đồ sơ sinh. Mọi vấn đề liên quan tới chất lượng sữa, chất lượng sản phẩm thì 2 người trao đổi với nhau hoàn toàn chịu trách nhiệm. Nếu trao đổi sữa, Baby Bank khuyến cáo người dùng nên trao đổi qua bệnh viện. BabyBank không có trách nhiệm nào trước pháp luật nếu như sản phẩm 2 cá nhân tự trao đổi không đảm bảo.
                 </p>
+                <Divider orientation="right" style={{
+                    borderColor: 'transparent'
+                }}>
+                    <h3>BABY BANK Admin Team</h3>
+                </Divider>
             </div>
         </Layout>
     )

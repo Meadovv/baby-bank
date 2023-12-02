@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react"
 import Layout from "../../components/Layout/Layout"
-import { Row, Col, message, Tag } from 'antd'
+import { Row, Col, message, Tag, Input } from 'antd'
 import axios from "axios"
 import { useNavigate, useSearchParams } from 'react-router-dom'
+import MessageCard from "../../components/Chat/MessageCard"
 
 const AdminChat = () => {
 
@@ -12,6 +13,8 @@ const AdminChat = () => {
     const [current, setCurrent] = useState({
         _id: '-1'
     })
+
+    const [chatList, setChatList] = useState([])
 
     const loadUserList = async () => {
         await axios.post('/api/v1/admin/get-user-chat-list',
@@ -43,9 +46,37 @@ const AdminChat = () => {
                 Authorization: "Bearer " + localStorage.getItem('token')
             },
         }).then(res => {
-
+            setChatList(res.data.message)
         }).catch(err => {
-            
+            console.log(err.message)
+        })
+    }
+
+    const send = async (value) => {
+        if(!value) return
+        await axios.post('/api/v1/chat/send-chat',
+        {
+            question: value,
+            to: current._id
+        },
+        {
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem('token')
+            },
+        }).then(res => {
+            if(res.data.success) {
+                setChatList([
+                    ...chatList,
+                    {
+                        key: Date.now(),
+                        role: 'user',
+                        content: value
+                    }
+                ])
+            }
+        }).catch(err => {
+            console.log(err)
+            message.error(err.message)
         })
     }
 
@@ -55,6 +86,7 @@ const AdminChat = () => {
 
     useEffect(() => {
         loadHistory(current._id)
+        current.status = 'read'
     }, [current])
 
     return (
@@ -70,10 +102,10 @@ const AdminChat = () => {
                     borderRadius: 10
                 }}>
                     {
-                        userList && userList.map(user => {
+                        userList && userList.map((user, index) => {
 
                             return (
-                                <div style={{
+                                <div key={index} style={{
                                     width: '100%',
                                     height: '10%',
                                     backgroundColor: current._id === user._id ? '#B9D9EB' : '#F0F8FF',
@@ -110,13 +142,29 @@ const AdminChat = () => {
                     }
                 </Col>
                 <Col span={18} style={{
-                    height: '100%',
-                    overflow: 'auto',
-                    padding: 10,
-                    borderRadius: 10,
-                    backgroundColor: 'blue'
+                    padding: 10
                 }}>
-
+                    <div style={{
+                        height: '80vh',
+                        overflow: 'auto',
+                        padding: 10,
+                        borderRadius: 10,
+                        backgroundColor: '#F5F5F5'
+                    }}>
+                        {
+                            chatList && chatList.map((item) => <MessageCard key={item.key} message={item}/>)
+                        }
+                    </div>
+                    <Input.Search
+                        size='large'
+                        enterButton={'Gửi'}
+                        onSearch={send}
+                        allowClear
+                        style={{
+                            width: '100%',
+                            marginTop: 10
+                        }}
+                    />
                 </Col>
             </Row>
         </Layout>

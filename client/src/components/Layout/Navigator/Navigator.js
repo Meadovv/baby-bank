@@ -55,13 +55,13 @@ const Navigator = () => {
           url: `/profile/${user?._id}`
         },
         {
+          title: 'Điều khoản',
+          url: '/terms-of-use'
+        },
+        {
           title: 'Đăng xuất',
           url: '/logout'
         },
-        {
-          title: 'Điều khoản',
-          url: '/terms-of-use'
-        }
       ]
     }
   ]
@@ -70,6 +70,10 @@ const Navigator = () => {
     {
       title: 'Trang chủ',
       url: '/admin'
+    },
+    {
+      title: 'Cấp quyền',
+      url: '/admin-account-manager'
     },
     {
       title: 'Tin nhắn',

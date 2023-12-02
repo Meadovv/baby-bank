@@ -49,6 +49,10 @@ const EditPost = () => {
     }
 
     const handleSave = async () => {
+        
+        post.lat = user?.location.lat
+        post.lng = user?.location.lng
+
         await axios.post('/api/v1/post/update-post',
         {
             post: post

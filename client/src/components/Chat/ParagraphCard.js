@@ -2,10 +2,10 @@ const ParagraphCard = ({ content }) => {
     return (
         <>
         {
-            content.split('\n').map(row => {
+            content.split('\n').map((row, index) => {
 
                 return (
-                    <p style={{
+                    <p key={index} style={{
                         fontSize: 14,
                         lineHeight: 1.5,
                         textAlign: 'justify'
