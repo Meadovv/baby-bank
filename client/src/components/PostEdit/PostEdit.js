@@ -200,12 +200,12 @@ const PostEdit = ({ user, post, handleChange }) => {
                     <div style={{
                         display: 'flex',
                         justifyContent: 'space-between',
-                        width: '20%'
+                        width: '100%'
                     }}>
                         <h3>Loại bài viết: </h3>
                         <Select
                             style={{
-                                width: '50%'
+                                width: '90%'
                             }}
                             defaultValue={post?.amount === -1 ? 'thing-donation' : 'milk-donation'}
                             options={[
