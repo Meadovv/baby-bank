@@ -71,15 +71,16 @@ const InformationCard = ({ allowAction, post }) => {
                 }}>{post?.ownerName}</h2>
                 <Tag color="geekblue" style={{ fontSize: 20, height: 30, padding: 5, margin: 10, borderColor: 'blue' }}>
                     {
-                        post.mode === "individual" ? "Người dùng" :
-                            post.mode === "organization" ? "Tổ chức" :
-                                post.mode === "hospital" ? "Bệnh viện" : "Quản trị viên"
+                        post?.mode === "individual" ? "Người dùng" :
+                            post?.mode === "organization" ? "Tổ chức" :
+                                post?.mode === "hospital" ? "Bệnh viện" : "Quản trị viên"
                     }
                 </Tag>
                 <div><i className="fa-solid fa-people-arrows fa-xl" /> - {distance(user?.location?.lat, user?.location?.lng, post?.lat, post?.lng)} km</div>
             </div>
             <Space style={{
                 margin: 20,
+                display: post?.mode === 'admin' ? 'none' : ''
             }}>
                 {
                     post?.ownerId === user?._id ? <></> :

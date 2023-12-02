@@ -57,6 +57,10 @@ const Navigator = () => {
         {
           title: 'Đăng xuất',
           url: '/logout'
+        },
+        {
+          title: 'Điều khoản',
+          url: '/terms-of-use'
         }
       ]
     }
