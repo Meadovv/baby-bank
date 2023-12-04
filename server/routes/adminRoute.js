@@ -1,7 +1,7 @@
 const express = require('express')
 
 const {
-    loadUserChatList, getUserList, accountSetting
+    loadUserChatList, getUserList, accountSetting, getPostList, postSetting
 } = require('../controllers/adminCtrl')
 
 const {
@@ -14,6 +14,10 @@ router.post('/get-user-chat-list', adminMiddleware, loadUserChatList)
 
 router.post('/get-user-list', adminMiddleware, getUserList)
 
+router.post('/get-post-list', adminMiddleware, getPostList)
+
 router.post('/account-setting', adminMiddleware, accountSetting)
+
+router.post('/post-setting', adminMiddleware, postSetting)
 
 module.exports = router;

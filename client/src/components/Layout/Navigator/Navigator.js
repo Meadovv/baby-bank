@@ -76,6 +76,10 @@ const Navigator = () => {
       url: '/admin-account-manager'
     },
     {
+      title: 'Bài đăng',
+      url: '/admin-post-manager'
+    },
+    {
       title: 'Tin nhắn',
       url: '/admin-chat'
     },

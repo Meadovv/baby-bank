@@ -1,5 +1,6 @@
 const chatModel = require('../models/chatModel')
 const userModel = require('../models/userModel')
+const postModel = require('../models/postModel')
 
 const loadUserChatList = async (req, res) => {
     await chatModel.distinct('from', {
@@ -82,6 +83,44 @@ const getUserList = async (req, res) => {
     })
 }
 
+const getPostList = async (req, res) => {
+    let findKey = {
+        mode: {$ne: 'admin'}
+    }
+
+    if(req.body.key.length === 24) {
+        findKey['_id'] = req.body.key
+    }
+
+    await postModel.find(findKey)
+    .then(posts => {
+
+        let postList = []
+        posts.forEach(post => {
+            postList.push({
+                _id: post._id,
+                ownerId: post.ownerId,
+                ownerName: post.ownerName,
+                title: post.title,
+                active: post.active,
+                mode: post.mode
+            })
+        })
+
+        res.status(200).send({
+            success: true,
+            postList: postList
+        })
+    })
+    .catch(err => {
+        console.log(err)
+        res.status(500).send({
+            success: false,
+            message: err.message
+        })
+    })
+}
+
 const accountSetting = async (req, res) => {
     await userModel.findById({
         _id: req.body._id
@@ -110,8 +149,39 @@ const accountSetting = async (req, res) => {
     })
 }
 
+const postSetting = async (req, res) => {
+    await postModel.findById({
+        _id: req.body._id
+    }).then(async (post) => {
+        if(post) {
+            post[req.body.key] = req.body.value
+
+            await post.save()
+
+            res.status(200).send({
+                success: true,
+                message: 'Thay đổi thành công'
+            })
+        } else {
+            res.status(200).send({
+                success: false,
+                message: 'Không tìm thấy bài đăng'
+            })
+        }
+    }).catch(err => {
+        console.log(err)
+        res.status(500).send({
+            success: false,
+            message: err.message
+        })
+    })
+}
+
+
 module.exports = {
     loadUserChatList,
     getUserList,
-    accountSetting
+    accountSetting,
+    getPostList,
+    postSetting
 }
