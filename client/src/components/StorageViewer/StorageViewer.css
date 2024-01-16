@@ -1,0 +1,69 @@
+.storage-view-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.storage-list-view {
+    width: 30%;
+    padding: 0 1rem;
+}
+
+.storage-current-view {
+    width: 70%;
+    padding: 0 1rem;
+}
+
+.item-card-container {
+    padding: 1rem;
+    margin: 1rem 0;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.item-card-container:hover {
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+}
+
+.item-card-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.item-card-date {
+    font-size: 1rem;
+    color: #666;
+
+}
+
+.item-card {
+    margin: 0.5rem;
+}
+
+.storage-current-view-container {
+    flex-direction: column;
+    margin-top: 1rem;
+    margin-left: 1rem;
+}
+
+.storage-current-card-item {
+    margin: 0.5rem;
+    font-size: 1.2rem;
+}
+
+@media screen and (max-width: 1000px) {
+    .storage-view-container {
+        flex-direction: column;
+    }
+
+    .storage-list-view {
+        width: 90%;
+        padding: 0 1rem;
+    }
+
+    .storage-current-view {
+        width: 90%;
+        padding: 0 1rem;
+    }
+}

@@ -1,0 +1,96 @@
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+.side-background-container {
+    display: flex;
+}
+
+.side-background {
+    height: 100vh;
+    width: auto;
+}
+
+.logo-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.auth-logo {
+    width: 100%;
+    height: auto;
+}
+
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+}
+
+.form {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+}
+
+.form-item {
+    width: 100%;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0.5rem;
+}
+
+.form-label {
+    font-size: 1rem;
+    margin: 0.5rem;
+}
+
+@media screen and (max-width: 915px) {
+    .side-background-container {
+        display: none;
+    }
+
+    .form-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+    }
+
+    .auth-logo {
+        width: 50%;
+        height: auto;
+    }
+
+    .form {
+        margin-top: 1rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 95%;
+    }
+
+    .form-item {
+        width: 100%;
+        flex-direction: column;
+        justify-content: center;
+        padding: 0.5rem;
+    }
+
+    .form-label {
+        font-size: 1rem;
+        margin: 0.5rem;
+    }
+}

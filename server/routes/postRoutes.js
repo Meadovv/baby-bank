@@ -5,9 +5,9 @@ const {
     getAllPost,
     getUserPost,
     createPost,
-    deletePost,
     updatePost,
-    getPost
+    getPost,
+    switchPost
 } = require('../controllers/postCtrl')
 
 const { authMiddleware } = require('../middleware/authMiddleware')
@@ -24,8 +24,8 @@ router.post('/create-post', authMiddleware, createPost)
 
 router.post('/update-post', authMiddleware, updatePost)
 
-router.post('/delete-post', authMiddleware, deletePost)
-
 router.post('/get-post', authMiddleware, getPost)
+
+router.post('/switch-post', authMiddleware, switchPost)
 
 module.exports = router

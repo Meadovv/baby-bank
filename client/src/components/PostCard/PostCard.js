@@ -1,49 +1,59 @@
-import { Card, Col, Tag } from 'antd'
+import Tag from '../Tag/Tag'
 import { useNavigate } from 'react-router-dom'
+import './PostCard.css'
 
 const toDate = ( millis ) => {
     const date = new Date(millis)
     return date.toLocaleString('en-GB')
 }
 
-const PostCard = ({ post, width }) => {
+const PostCard = ({ post, type }) => {
 
     const navigate = useNavigate()
 
-    const color = post.mode === "individual" ? "#55acee" :
-                    post.mode === "organization" ? "#3b5999" : 
-                        post.mode === "hospital" ? "#cd201f" : "#131921"
+    const color = post.ownerMode === "individual" ? "#55acee" :
+                    post.ownerMode === "organization" ? "#3b5999" : 
+                        post.ownerMode === "hospital" ? "#cd201f" : "#131921"
 
 
-    const mode = post.mode === "individual" ? "Người dùng" :
-                    post.mode === "organization" ? "Tổ chức" : 
-                        post.mode === "hospital" ? "Bệnh viện" : "Quản trị viên"
+    const mode = type === 'post' ? (post.ownerMode === "individual" ? "Người dùng" :
+    post.ownerMode === "organization" ? "Tổ chức" : 
+        post.ownerMode === "hospital" ? "Bệnh viện" : "Quản trị viên") : (post.mode === "hospital" ? "Bệnh viện" : "Tổ chức")
 
-    const imageLink = post.mode === "individual" ? (Number(post.amount) !== -1 ? "/images/post/milk-donation.png" : "/images/post/thing-donation.png") :
-                        post.mode === "organization" ? "/images/post/organization.png" :
-                            post.mode === "hospital" ? "/images/post/hospital.png" : "/images/post/admin.jpg"
+    const imageLink = type === 'post' ? (post.hashTag === "milk" ? "/images/post/milk-donation.png" : 
+    post.hashTag === 'no-milk' ? "/images/post/thing-donation.png" :
+        post.hashTag === "donation" ? "/images/post/organization.png" :
+            post.hashTag === "knowledge" ? "/images/post/hospital.png" : "/images/post/admin.jpg") : (post.mode === "hospital" ? "/images/post/hospital.png" : "/images/post/organization.png")
 
     return (
-        <Col span={width}>
-            <Card 
-                title={post.user}
-                cover={<img alt='hospital-img' src={imageLink} />}
-                extra={
-                    <>
-                        <Tag color={color} key='my-tag'>{mode}</Tag>
-                        {
-                            !post?.active ? <Tag color='red' key='my-tag2'>Đã hủy kích hoạt</Tag> : <></>
-                        }
-                    </>
-                }
-                hoverable
-                onClick={() => {
-                    navigate(`/post/${post._id}`)
-                }}
-            >
-                <Card.Meta title={post.title} description={toDate(post.time)} />
-            </Card>
-        </Col>
+        <div className='post-card' onClick={() => {
+            if(type === 'post') {
+                navigate(`/post/${post?._id}/view`)
+            } else {
+                navigate(`/profile/${post?._id}`)
+            }
+        }}>
+            <div className='post-card-header'>
+                <div className='post-card-header-title'>{
+                    type === 'post' ? post?.title : post?.name
+                }</div>
+                <div className='post-card-header-date'>{
+                    (type === 'post' ? 'Đăng vào ' : 'Tham gia vào ') + toDate(post?.createDate)
+                }</div>
+            </div>
+            <div className='post-card-body'>
+                <img src={imageLink} alt='body-image' className='post-card-body-image' />
+            </div>
+            <div className='post-card-footer'>
+                <div className='post-card-footer-title'>{type === 'post' ? post?.ownerName : post?.name}</div>
+                <>
+                    <Tag color={color} >{mode}</Tag>
+                    {
+                        !post?.active ? <Tag color='red' >Đã hủy kích hoạt</Tag> : <></>
+                    }
+                </>
+            </div>
+        </div>
     )
 }
 

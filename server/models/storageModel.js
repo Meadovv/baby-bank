@@ -1,22 +1,22 @@
 const mongoose = require('mongoose')
 
 const storageSchema = new mongoose.Schema({
+    action: {
+        type: String,
+    },
     owner: {
-        type: String
+        type: String,
     },
     from: {
-        type: String
+        type: {},
     },
-    action: {
-        type: String
-    },
-    amount: {
-        type: String
+    data: {
+        type: {}
     },
     createDate: {
         type: Number
     }
-})
+}, { versionKey: false })
 
 const storageModel = mongoose.model('storages', storageSchema)
 

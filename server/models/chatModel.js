@@ -1,22 +1,22 @@
 const mongoose = require('mongoose')
 
 const chatSchema = new mongoose.Schema({
+    active: {
+        type: Boolean,
+    },
     from: {
-        type: String
+        type: {},
     },
     to: {
-        type: String
+        type: {},
     },
-    message: {
-        type: String
-    },
-    status: {
-        type: String
+    data: {
+        type: []
     },
     createDate: {
         type: Number
     }
-})
+}, { versionKey: false })
 
 const chatModel = mongoose.model('chats', chatSchema)
 

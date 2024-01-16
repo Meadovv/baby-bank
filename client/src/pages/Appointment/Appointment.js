@@ -1,55 +1,56 @@
-import { useEffect, useState } from "react"
-import Layout from "../../components/Layout/Layout"
-import { SyncOutlined, CheckCircleOutlined, CloseCircleOutlined, ExclamationCircleOutlined, ClockCircleOutlined } from '@ant-design/icons'
-import { Row, Col, message, List, Card, Tag } from 'antd'
-import axios from 'axios'
-import Spinner from '../../components/Spinner'
-import { useNavigate, useSearchParams } from "react-router-dom"
-import AppointmentView from "./AppointmentView"
-import { useSelector } from "react-redux"
+import { useNavigate, useSearchParams } from "react-router-dom";
+import Layout from "../../components/Layout/Layout";
+import "./Appointment.css";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useSelector } from "react-redux";
+import { Select } from "antd";
+import { message } from "antd";
+import AppointmentViewer from "../../components/AppointmentViewer/AppointmentViewer";
 
-const toDate = (millis) => {
-    const date = new Date(millis)
-    return date.toLocaleString('en-GB')
-}
-
-const defaultAppointment = {
-    _id: '-1',
-    from: {
-        _id: null,
-        name: null
+const typeList = [
+    {
+        label: 'Tất cả',
+        value: 'all',
+        icon: 'fa-solid fa-calendar'
     },
-    to: {
-        _id: null,
-        name: null
+    {
+        label: 'Đang chờ',
+        value: 'pending',
+        icon: 'fa-solid fa-calendar-minus'
     },
-    message: {
-        post: null,
-        data: {
-            appointment_type: null,
-            message: null,
-            value: null
-        }
+    {
+        label: 'Chấp nhận',
+        value: 'approved',
+        icon: 'fa-solid fa-calendar-check'
     },
-    reply: null,
-    status: null,
-    createDate: null
-}
+    {
+        label: 'Từ chối',
+        value: 'rejected',
+        icon: 'fa-solid fa-calendar-xmark'
+    },
+    {
+        label: 'Hoàn thành',
+        value: 'completed',
+        icon: 'fa-solid fa-file-zipper'
+    }
+]
 
-const Appointment = () => {
+export default function Appointment() {
 
-    const navigate = useNavigate()
-    const [searchParam, setSearchParam] = useSearchParams()
     const { user } = useSelector(state => state.user)
+    const [current, setCurrent] = useState(typeList[0].value)
+    const [requestList, setRequestList] = useState([])
+    const [loading, setLoading] = useState(false);
+    const [searchParams, setSearchParams] = useSearchParams();
 
-    const [loading, setLoading] = useState(false)
-    const [appointmentList, setAppointmentList] = useState([])
-    const [curAppointment, setCurAppointment] = useState(defaultAppointment)
+    const navigate = useNavigate();
 
-    const getAppointmentList = async () => {
-        await axios.post('/api/v1/appointment/get-all-appointment',
+    const getRequestList = async () => {
+        setLoading(true)
+        await axios.post('/api/v1/request/get-all-request',
             {
-
+                status: current,
             },
             {
                 headers: {
@@ -57,164 +58,66 @@ const Appointment = () => {
                 },
             }).then(res => {
                 if (res.data.success) {
-                    setAppointmentList(res.data.appointmentList)
+                    setRequestList(res.data.requestList)
                 } else {
                     message.error(res.data.message)
-                    setAppointmentList([])
+                    setRequestList([])
                 }
             }).catch(err => {
                 console.log(err)
-                message.error(err.message)
-            })
-    }
-
-    const getAppointment = async (appointmentId) => {
-        setLoading(true)
-        await axios.post('/api/v1/appointment/get-appointment',
-            {
-                appointmentId: appointmentId
-            },
-            {
-                headers: {
-                    Authorization: "Bearer " + localStorage.getItem('token')
-                },
-            }).then(res => {
-                if (res.data.success) {
-                    setCurAppointment(res.data.appointment)
-                } else {
-                    setCurAppointment(defaultAppointment)
-                }
-            }).catch(err => {
-                console.log(err)
-                message.error(err.message)
             })
         setLoading(false)
     }
 
-    const handleAppointment = async (appointmentId, status) => {
-        await axios.post('/api/v1/appointment/handle-appointment',
-            {
-                appointmentId: appointmentId,
-                status: status
-            },
-            {
-                headers: {
-                    Authorization: "Bearer " + localStorage.getItem('token')
-                },
-            }).then(res => {
-                if (res.data.success) {
-                    message.success(res.data.message)
-                } else {
-                    message.error(res.data.message)
-                }
-            }).catch(err => {
-                console.log(err)
-                message.error(err.message)
-            })
-        navigate('/appointment')
-    }
+    useEffect(() => {
+        getRequestList()
+    }, [current, setCurrent])
 
     useEffect(() => {
-        getAppointmentList()
-        if (searchParam.get('id')) {
-            getAppointment(searchParam.get('id'))
-        } else {
-            setCurAppointment(defaultAppointment)
-        }
-    }, [searchParam.get('id')])
+        const type = searchParams.get('status')
+        if(searchParams.get('status') && typeList.find(item => item.value === searchParams.get('status'))) setCurrent(type)
+        else navigate(`/appointment?status=${typeList[0].value}`)
+    }, [searchParams])
 
     return (
         <Layout>
-            <Row style={{
-                minHeight: '90vh'
-            }}>
-                <Col span={8} style={{
-                    padding: 10
-                }}>
-                    <h1>Danh sách cuộc hẹn</h1>
-                    <List
-                        pagination={{
-                            align: 'center',
-                            position: 'bottom',
-                            pageSize: 5
-                        }}
-                        dataSource={appointmentList}
-                        renderItem={(appointment, index) => (
-                            <Card
-                                hoverable
-                                title={toDate(appointment.createDate)}
-                                extra={<>
-                                    {
-                                        appointment.status === 'pending' ?
-                                            <Tag icon={<SyncOutlined spin />} color="processing">Đang chờ</Tag> :
-                                            appointment.status === 'approved' ?
-                                                <Tag icon={<ClockCircleOutlined />} color="blue">Chấp nhận</Tag> :
-                                                    appointment.status === 'rejected' ?
-                                                    <Tag icon={<CloseCircleOutlined />} color="error">Từ chối</Tag> :
-                                                    <Tag icon={<CheckCircleOutlined />} color="success">Hoàn thành</Tag>
-                                    }
-                                    {
-                                        appointment.to === user?._id && appointment.status === 'approved' ?
-                                            <Tag icon={<ExclamationCircleOutlined />} color="warning">
-                                                Hành động
-                                            </Tag> : null
-                                    }
-                                </>
-
-                                }
-                                style={{
-                                    marginTop: 10,
-                                }}
-                                headStyle={{
-                                    backgroundColor: searchParam.get('id') === appointment._id ? '#7CB9E8' : 'white',
-                                    color: searchParam.get('id') === appointment._id ? '#ffffff' : 'black'
-                                }}
-                                onClick={() => {
-                                    navigate(`/appointment?id=${appointment._id}`)
-                                }}
-                            >
-                                <Card.Meta
-                                    title={
-                                        appointment.from === user._id ?
-                                            appointment.status === 'pending' ?
-                                                'Đang chờ cuộc hẹn xét duyệt' :
-                                                appointment.status === 'approved' ?
-                                                    'Cuộc hẹn đã được chấp nhận' :
-                                                        appointment.status === 'rejected' ?
-                                                        'Cuộc hẹn đã bị từ chối' : 
-                                                        'Cuộc hẹn đã hoàn thành' :
-                                            'Bạn có cuộc hẹn mới'
-                                    }
-                                    description={appointment.message.data.message}
-                                />
-                            </Card>
-                        )}
-                    />
-                </Col>
-                <Col span={16} style={{
-                    padding: 10
-                }}>
-                    <div style={{
-                        display: searchParam.get('id') === null ? 'flex' : 'none',
-                        width: '100%',
-                        minHeight: '80vh',
-                        justifyContent: 'center',
-                        alignItems: 'center'
-                    }}>
-                        <i className="fa-solid fa-comments fa-2xl"></i>
-                    </div>
+            <div className="explore-container">
+                <div className="title-container-center">
+                    <div className="title">Cuộc hẹn</div>
+                </div>
+                <div className="post-type-container">
                     {
-                        loading ? <Spinner /> :
-                            <AppointmentView
-                                allowAction={curAppointment.from._id !== user?._id && curAppointment.status === 'approved'}
-                                handleAppointment={handleAppointment}
-                                curAppointment={curAppointment}
-                            />
+                        typeList && typeList.map((type, index) => {
+                            return (
+                                <div className="post-type" key={index} onClick={() => {
+                                    navigate(`/appointment?status=${type.value}`)
+                                }} style={{
+                                    backgroundColor: current === type.value ? '#00308F' : 'white',
+                                    color: current === type.value ? 'white' : '#00308F',
+                                    borderRadius: 10
+                                }}>
+                                    <i className={`${type.icon}`}></i>
+                                    <p className="post-type-label">{type.label}</p>
+                                </div>
+                            )
+                        })
                     }
-                </Col>
-            </Row>
+                </div>
+                <div className="post-type-container-mobile">
+                    <Select
+                        style={{
+                            width: '100%',
+                        }}
+                        size="large"
+                        options={typeList}
+                        defaultValue={typeList[0]}
+                        onChange={(value) => {
+                            navigate(`/appointment?status=${value}`)
+                        }}
+                    />
+                </div>
+                <AppointmentViewer appointmentList={requestList} loading={loading} />
+            </div>
         </Layout>
     )
 }
-
-export default Appointment

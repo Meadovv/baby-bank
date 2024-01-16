@@ -4,26 +4,29 @@ const postSchema = new mongoose.Schema({
     active: {
         type: Boolean,
     },
-    mode: {
+    hashTag: {
+        type: String,
+    },
+    ownerMode: {
         type: String,
     },
     ownerId: {
-        type: mongoose.Schema.ObjectId,
+        type: String,
     },
     ownerName: {
-        type: String
-    },
-    writer: {
-        type: String
+        type: String,
     },
     title: {
         type: String,
     },
+    amount: {
+        type: Number,
+    },
     content: {
         type: {},
     },
-    amount: {
-        type: Number,
+    images: {
+        type: [],
     },
     lat: {
         type: Number,
@@ -34,7 +37,7 @@ const postSchema = new mongoose.Schema({
     createDate: {
         type: Number,
     }
-})
+}, { versionKey: false })
 
 const postModel = mongoose.model('posts', postSchema)
 

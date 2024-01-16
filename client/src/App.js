@@ -8,26 +8,26 @@ import ProtectedRoute from './components/Routes/ProtectedRoute'
 import Login from './pages/Authentication/Login'
 import Register from './pages/Authentication/Register'
 import Logout from './pages/Authentication/Logout'
-import Home from './pages/Home/Home'
-import Post from './pages/Post/Post'
-import PostDetail from './pages/PostDetail/PostDetail'
-import Account from './pages/Account/Account'
-import Error from './pages/Error/Error'
-import Request from './pages/Request/Request';
-import CreatePost from './pages/CreatePost/CreatePost';
-import Appointment from './pages/Appointment/Appointment';
-import Hospital from './pages/Hospital/Hospital'
-import Organization from './pages/Organization/Organization'
-import PostManager from './pages/PostManager/PostManager'
-import StorageManage from './pages/StorageManage/StorageManage'
-import EditPost from './pages/EditPost/EditPost'
-import AdminHome from './pages/Admin/AdminHome'
-import AdminChat from './pages/Admin/AdminChat'
-import AdminReport from './pages/Admin/AdminReport'
 
+
+import Home from './pages/Home/Home'
+import Explore from './pages/Explore/Explore'
+import Setting from './pages/Setting/Setting'
+import Appointment from './pages/Appointment/Appointment'
+import Profile from './pages/Profile/Profile'
+import Chat from './pages/Chat/Chat'
+
+
+import ViewPost from './pages/Post/ViewPost'
+import CreatePost from './pages/Post/CreatePost';
+import EditPost from './pages/Post/EditPost'
+
+import Error from './pages/Error/Error'
 import Terms from './pages/Terms/Terms'
-import AdminAccountManager from './pages/Admin/AdminAccountManager'
-import AdminPost from './pages/Admin/AdminPost'
+import Recovery from './pages/Recovery/Recovery'
+import Forgot from './pages/Authentication/Forgot'
+import ManagePost from './pages/Post/ManagePost'
+import StorageManage from './pages/StorageManage/StorageManage'
 
 function App() {
 
@@ -57,75 +57,59 @@ function App() {
             }/>
 
             <Route path='/profile/:profileId' element={
-              <ProtectedRoute admin={false} children={<Account />}/>
+              <ProtectedRoute admin={false} children={<Profile />}/>
             }/>
 
-            <Route path='/post' element={
-              <ProtectedRoute admin={false} children={<Post />}/>
+            <Route path='/setting' element={
+              <ProtectedRoute admin={false} children={<Setting />}/>
             }/>
 
-            <Route path='/post/:postId' element={
-              <ProtectedRoute admin={false} children={<PostDetail />}/>
-            }/>
-
-            <Route path='/request' element={
-              <ProtectedRoute admin={false} children={<Request />}/>
+            <Route path='/explore' element={
+              <ProtectedRoute admin={false} children={<Explore />}/>
             }/>
 
             <Route path='/appointment' element={
-              <ProtectedRoute admin={false} children={<Appointment />} />
+              <ProtectedRoute admin={false} children={<Appointment />}/>
             }/>
 
-            <Route path='/hospital' element={
-              <ProtectedRoute admin={false} children={<Hospital />} />
+            <Route path='/chat/:userId' element={
+              <ProtectedRoute admin={false} children={<Chat />}/>
             }/>
 
-            <Route path='/organization' element={
-              <ProtectedRoute admin={false} children={<Organization />} />
-            }/>
-
-            <Route path='/create-post' element={
+            <Route path='/post/create' element={
               <ProtectedRoute admin={false} children={<CreatePost />}/>
+            }/>
+
+            <Route path='/post/:postId/view' element={
+              <ProtectedRoute admin={false} children={<ViewPost />}/>
             }/>
 
             <Route path='/post/:postId/edit' element={
               <ProtectedRoute admin={false} children={<EditPost />}/>
             }/>
 
-            <Route path='/manage-post' element={
-              <ProtectedRoute admin={false} children={<PostManager />}/>
+            <Route path='/manage/post' element={
+              <ProtectedRoute admin={false} children={<ManagePost />}/>
             }/>
-            
-            <Route path='/manage-storage' element={
+
+            <Route path='/manage/storage' element={
               <ProtectedRoute admin={false} children={<StorageManage />}/>
             }/>
 
-            <Route path='*' element={
-              <Error />
+            <Route path='/recovery/:token' element={
+              <Recovery />
             }/>
 
             <Route path='/terms-of-use' element={
               <Terms />
             }/>
 
-            <Route path='/admin' element={
-              <ProtectedRoute admin={true} children={<AdminHome />}/>
+            <Route path='/forgot-password' element={
+              <Forgot />
             }/>
 
-            <Route path='/admin-chat' element={
-              <ProtectedRoute admin={true} children={<AdminChat />}/>
-            }/>
-
-            <Route path='/admin-report' element={
-              <ProtectedRoute admin={true} children={<AdminReport />}/>
-            }/>
-
-            <Route path='/admin-account-manager' element={
-              <ProtectedRoute admin={true} children={<AdminAccountManager />} />
-            }/>
-
-            <Route path='/admin-post-manager' element={
-              <ProtectedRoute admin={true} children={<AdminPost />} />
+            <Route path='*' element={
+              <Error />
             }/>
           </Routes>
         }

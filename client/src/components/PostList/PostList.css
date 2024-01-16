@@ -1,0 +1,6 @@
+.post-list-container {
+    max-width: 1600px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+}

@@ -5,8 +5,8 @@ const {
     getUserData,
     getProfileData,
     updateUser,
-    changePassword,
-    sendVerifyCode
+    recovery,
+    forgot
 } = require('../controllers/authCtrl')
 
 const { authMiddleware } = require('../middleware/authMiddleware')
@@ -17,14 +17,14 @@ router.post('/login', loginController)
 
 router.post('/register', registerController)
 
-router.post('/send-verify-code', sendVerifyCode)
-
 router.post('/update-user-data', authMiddleware, updateUser)
 
 router.post('/get-user-data', authMiddleware, getUserData)
 
 router.post('/get-profile-data', authMiddleware, getProfileData)
 
-router.post('/change-password', authMiddleware, changePassword)
+router.get('/recovery/:token', recovery)
+
+router.post('/forgot', forgot)
 
 module.exports = router;

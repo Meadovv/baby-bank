@@ -13,34 +13,23 @@ connectDB();
 const app = express()
 
 // middleware
-app.use(express.json({limit: '5mb'}))
+app.use(express.json({limit: '50mb'}))
 app.use(morgan('dev'))
 
 //routes
 app.use('/api/v1/authentication', require('./routes/authRoutes'))
-app.use('/api/v1/geometry', require('./routes/geoRoutes'))
 app.use('/api/v1/post', require('./routes/postRoutes'))
-app.use('/api/v1/request', require('./routes/requestRoute'))
-app.use('/api/v1/appointment', require('./routes/appointmentRoute'))
-app.use('/api/v1/notification', require('./routes/notificationRoute'))
-app.use('/api/v1/storage', require('./routes/storageRoute'))
-app.use('/api/v1/assistant', require('./routes/assistantRoute'))
-app.use('/api/v1/chat', require('./routes/chatRoute'))
-app.use('/api/v1/admin', require('./routes/adminRoute'))
+app.use('/api/v1/request', require('./routes/requestRoutes'))
+app.use('/api/v1/storage', require('./routes/storageRoutes'))
+app.use('/api/v1/chat', require('./routes/chatRoutes'))
 
-app.use('/api/v1/function', require('./routes/reportRoutes'))
-app.use('/api/v1/function', require('./routes/publicRoute'))
-app.use('/api/v1/function', require('./routes/listRoute'))
+app.use('/api/v1/function', require('./routes/publicRoutes'))
 
 app.get('/', (req, res) => {
     res.status(200).send({
         message: "server running",
     });
 });
-
-app.get('/get-answer', async (req, res) => {
-
-})
 
 app.listen(process.env.SERVER_PORT, (req, res) => {
     console.log(`>>> Log: Server is running in ${process.env.NODE_MODE} Mode on PORT: ${process.env.SERVER_PORT}`);

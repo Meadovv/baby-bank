@@ -1,78 +1,17 @@
 const userModel = require('../models/userModel')
 const postModel = require('../models/postModel')
 
-let getInformation = async (req, res) => {
-
-    const userAccount = await userModel.find({
-        mode: { $ne: 'hospital' }
-    })
-
-    const hospitalAccount = await userModel.find({
-        mode: 'hospital'
-    })
-
-    const post = await postModel.find({
-        mode: { $ne: 'hospital' }
-    })
-
-    const hospitalPost = await postModel.find({
-        mode: 'hospital'
-    })
-
-    // get information from begin this month
-
-    const userAccountThisMonth = await userModel.find({
-        mode: { $ne: 'hospital' },
-        createDate: { $gt: (new Date((new Date()).getFullYear(), (new Date()).getMonth() - 1, 1)).getTime() }
-    })
-
-    const hospitalAccountThisMonth = await userModel.find({
-        mode: 'hospital',
-        createDate: { $gt: (new Date((new Date()).getFullYear(), (new Date()).getMonth() - 1, 1)).getTime() }
-    })
-
-    const postThisMonth = await postModel.find({
-        mode: { $ne: 'hospital' },
-        createDate: { $gt: (new Date((new Date()).getFullYear(), (new Date()).getMonth() - 1, 1)).getTime() }
-    })
-
-    const hospitalPostThisMonth = await postModel.find({
-        mode: 'hospital',
-        createDate: { $gt: (new Date((new Date()).getFullYear(), (new Date()).getMonth() - 1, 1)).getTime() }
-    })
-
-    res.status(200).send({
-        user: userAccount.length,
-        hospital: hospitalAccount.length,
-        post: post.length,
-        hospitalPost: hospitalPost.length,
-        thisMonth: {
-            user: userAccountThisMonth.length,
-            hospital: hospitalAccountThisMonth.length,
-            post: postThisMonth.length,
-            hospitalPost: hospitalPostThisMonth.length,
-        }
-    })
-}
-
 const getNewPost = async (req, res) => {
     await postModel.find({
-        mode: {$ne: 'hospital'},
         active: true
     }).limit(6).sort({ createDate: -1 })
         .then(posts => {
             let postList = []
 
             posts.forEach(post => {
-                postList.push({
-                    _id: post._id,
-                    active: post.active,
-                    user: post.ownerName,
-                    mode: post.mode,
-                    title: post.title,
-                    amount: post.amount,
-                    time: post.createDate
-                })
+                post.images = []
+                if(post.title === null) post.title = 'Bài đăng không có tiêu đề'
+                postList.push(post)
             })
 
             res.status(200).send({
@@ -92,22 +31,16 @@ const getNewPost = async (req, res) => {
 
 const getNewAdminPost = async (req, res) => {
     await postModel.find({
-        mode: 'admin',
+        hashTag: 'admin',
         active: true
     }).limit(6).sort({ createDate: -1 })
     .then(posts => {
         let postList = []
 
         posts.forEach(post => {
-            postList.push({
-                _id: post._id,
-                active: post.active,
-                user: post.ownerName,
-                mode: post.mode,
-                title: post.title,
-                amount: post.amount,
-                time: post.createDate
-            })
+            post.images = []
+            if(post.title === null) post.title = 'Bài đăng không có tiêu đề'
+            postList.push(post)
         })
 
         res.status(200).send({
@@ -127,23 +60,17 @@ const getNewAdminPost = async (req, res) => {
 
 const getNewIndividualMilkPost = async (req, res) => {
     await postModel.find({
-        mode: 'individual',
-        amount: {$ne: -1},
+        ownerMode: 'individual',
+        hashTag: 'milk',
         active: true
     }).limit(6).sort({ createDate: -1 })
     .then(posts => {
         let postList = []
 
         posts.forEach(post => {
-            postList.push({
-                _id: post._id,
-                active: post.active,
-                user: post.ownerName,
-                mode: post.mode,
-                title: post.title,
-                amount: post.amount,
-                time: post.createDate
-            })
+            post.images = []
+            if(post.title === null) post.title = 'Bài đăng không có tiêu đề'
+            postList.push(post)
         })
 
         res.status(200).send({
@@ -163,23 +90,17 @@ const getNewIndividualMilkPost = async (req, res) => {
 
 const getNewIndividualNoMilkPost = async (req, res) => {
     await postModel.find({
-        mode: 'individual',
-        amount: -1,
+        ownerMode: 'individual',
+        hashTag: 'no-milk',
         active: true
     }).limit(6).sort({ createDate: -1 })
     .then(posts => {
         let postList = []
 
         posts.forEach(post => {
-            postList.push({
-                _id: post._id,
-                active: post.active,
-                user: post.ownerName,
-                mode: post.mode,
-                title: post.title,
-                amount: post.amount,
-                time: post.createDate
-            })
+            post.images = []
+            if(post.title === null) post.title = 'Bài đăng không có tiêu đề'
+            postList.push(post)
         })
 
         res.status(200).send({
@@ -199,21 +120,16 @@ const getNewIndividualNoMilkPost = async (req, res) => {
 
 const getNewOrganizationPost = async (req, res) => {
     await postModel.find({
-        mode: 'organization',
+        ownerMode: 'organization',
         active: true
     }).limit(6).sort({ createDate: -1 })
     .then(posts => {
         let postList = []
 
         posts.forEach(post => {
-            postList.push({
-                _id: post._id,
-                active: post.active,
-                user: post.ownerName,
-                mode: post.mode,
-                title: post.title,
-                time: post.createDate
-            })
+            post.images = []
+            if(post.title === null) post.title = 'Bài đăng không có tiêu đề'
+            postList.push(post)
         })
 
         res.status(200).send({
@@ -233,21 +149,16 @@ const getNewOrganizationPost = async (req, res) => {
 
 const getNewHospitalPost = async (req, res) => {
     await postModel.find({
-        mode: 'hospital',
+        ownerMode: 'hospital',
         active: true
     }).limit(6).sort({ createDate: -1 })
     .then(posts => {
         let postList = []
 
         posts.forEach(post => {
-            postList.push({
-                _id: post._id,
-                active: post.active,
-                user: post.ownerName,
-                mode: post.mode,
-                title: post.title,
-                time: post.createDate
-            })
+            post.images = []
+            if(post.title === null) post.title = 'Bài đăng không có tiêu đề'
+            postList.push(post)
         })
 
         res.status(200).send({
@@ -266,7 +177,6 @@ const getNewHospitalPost = async (req, res) => {
 }
 
 module.exports = {
-    getInformation,
     getNewPost,
     getNewAdminPost,
     getNewHospitalPost,

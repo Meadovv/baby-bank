@@ -1,0 +1,67 @@
+.create-post-container {
+    width: 100%;
+    min-height: 85vh;
+}
+
+.image-list {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+    justify-content: center;
+}
+
+.image-container {
+    position: relative;
+    margin-right: 15px;
+    margin-bottom: 15px;
+}
+
+.image-container img {
+    max-width: 300px;
+    height: auto;
+}
+
+.image-container button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 1rem;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 1rem;
+    cursor: pointer;
+}
+
+.quill-content {
+    min-height: 100vh;
+}
+
+.view-post-container {
+    min-height: 85vh;
+    padding: 3rem;
+    padding-top: 0;
+}
+
+.view-post-user-tab-container {
+    padding: 1rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    color: var(--primary-color);
+}
+
+@media screen and (max-width: 800px) {
+    .view-post-container {
+        padding: 0.5rem;
+    }
+
+    .view-post-user-tab-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    
+}

@@ -8,6 +8,7 @@
     "start": "node server.js",
     "server": "nodemon server.js",
     "client": "npm start --prefix ../client",
+    "assistant": "uvicorn assistant:app --port 8082 --reload",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "author": "meadow",

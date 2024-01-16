@@ -2,22 +2,85 @@ const postModel = require('../models/postModel')
 const userModel = require('../models/userModel')
 const mongoose = require('mongoose')
 
+let getMilkDonationPostContent = (value) => {
+    return content = {
+        ops: [
+            {
+                insert: 'BÀI ĐĂNG CHO SỮA'
+            },
+            {
+                attributes: {
+                    align: 'center',
+                    header: 2
+                },
+                insert: '\n'
+            },
+            {
+                insert: '\n'
+            },
+            {
+                insert: 'ĐÂY LÀ BÀI ĐĂNG CHO SỮA CỦA NGƯỜI DÙNG ĐĂNG TỪ HỆ THỐNG BABY BANK.'
+            },
+            {
+                attributes: {
+                    header: 3
+                },
+                insert: '\n'
+            },
+            {
+                attributes: {
+                    color: 'red'
+                },
+                insert: `LƯỢNG SỮA MUỐN CHO: ${value} (ml)`
+            },
+            {
+                attributes: {
+                    header: 1
+                },
+                insert: '\n'
+            },
+            {
+                insert: 'Những lưu ý khi sử dụng sữa từ hệ thống BABY BANK:'
+            },
+            {
+                attributes: {
+                    header: 2
+                },
+                insert: '\n'
+            },
+            {
+                insert: 'Cần lưu ý về chất lượng sữa'
+            },
+            {
+                attributes: {
+                    list: 'ordered'
+                },
+                insert: '\n'
+            },
+            {
+                insert: 'Cần lưu ý về thời gian bảo quản của sữa'
+            },
+            {
+                attributes: {
+                    list: 'ordered'
+                },
+                insert: '\n'
+            }
+        ]
+    }
+}
+
 let getAllUserPost = async (req, res) => {
     await postModel.find({
-        ownerId: req.body.user
-    }).limit(Number(req.body.limit)).sort({ createDate: -1, active: -1 }).then(posts => {
+        ownerId: req.body.userId
+    }).sort({ createDate: -1, active: -1 }).then(posts => {
 
         let postList = []
 
         posts.forEach(post => {
-            postList.push({
-                _id: post._id,
-                active: post.active,
-                user: post.ownerName,
-                mode: post.mode,
-                title: post.title,
-                time: post.createDate
-            })
+            post.images = []
+            if(post.title === null) post.title = 'Bài đăng không có tiêu đề'
+            postList.push(post)
         })
 
         res.status(200).send({
@@ -43,15 +106,9 @@ let getUserPost = async (req, res) => {
         let postList = []
 
         posts.forEach(post => {
-            postList.push({
-                _id: post._id,
-                active: post.active,
-                user: post.ownerName,
-                mode: post.mode,
-                title: post.title,
-                amount: post.amount,
-                time: post.createDate
-            })
+            post.images = []
+            if(post.title === null) post.title = 'Bài đăng không có tiêu đề'
+            postList.push(post)
         })
 
         res.status(200).send({
@@ -69,105 +126,99 @@ let getUserPost = async (req, res) => {
 }
 
 let getAllPost = async (req, res) => {
-
-    let userRadianLat = 0
-    let userRadianLng = 0
-
-    try {
-        userRadianLat = req.body.location.lat * 0.01745329252
-        userRadianLng = req.body.location.lng * 0.01745329252
-    } catch (err) {
-        userRadianLat = 0
-        userRadianLng = 0
-    }
-
-    let findKey = {}
-
-    if (req.body.type === 'all') {
-        findKey = {
-            active: true
-        }
-    } else {
-        if(req.body.type === 'no-milk') {
-            findKey = {
-                active: true,
-                mode: 'individual'
-            }
-        } else {
-            findKey = {
-                active: true,
-                mode: req.body.type === 'milk' ? 'individual' : req.body.type === 'donation' ? 'organization' : req.body.type === 'knowledge' ? 'hospital' : 'admin'
-            }
-        }
-    }
-
-    if (req.body.type === 'milk') {
-        findKey['amount'] = { $gt: req.body.min }
-    }
-
-    if (req.body.type === 'no-milk') {
-        findKey['amount'] = -1
-    }
-
-    findKey['ownerId'] = { $ne: req.body.userId }
-
-    await postModel.find(findKey).sort({createDate: -1})
-        .then(posts => {
-            if (posts.length > 0) {
-
-                let postList = []
-
-                posts.forEach(post => {
-
-                    const lat = post.lat * 0.01745329252
-                    const lng = post.lng * 0.01745329252
-        
-                    const distance = 
-                        Math.round((6378 * Math.acos(Math.sin(userRadianLat) * Math.sin(lat) + Math.cos(userRadianLat) * Math.cos(lat) * Math.cos(lng - userRadianLng))))
-
-                    if(Number(req.body.distance) !== 0 && distance > Number(req.body.distance)) return
-
-                    postList.push({
-                        _id: post._id,
-                        active: post.active,
-                        user: post.ownerName,
-                        mode: post.mode,
-                        title: post.title,
-                        amount: post.amount,
-                        time: post.createDate
-                    })
+    if(req.body.type === 'organization' || req.body.type === 'hospital') {
+        await userModel.find({
+            active: true,
+            mode: req.body.type
+        }).then(users => {
+            if(users.length) {
+    
+                const postList = []
+                users.forEach(user => {
+                    user.password = undefined
+                    postList.push(user)
                 })
-
+    
                 res.status(200).send({
                     success: true,
-                    postList: postList,
-                    message: 'Lấy bài đăng thành công'
+                    message: 'Lấy bài đăng thành công',
+                    postList: postList
                 })
             } else {
                 res.status(200).send({
                     success: false,
-                    message: 'Không có bài đăng hợp lệ'
+                    message: 'Không tìm thấy bài đăng'
                 })
             }
-        })
-        .catch(err => {
+        }).catch(err => {
             console.log(err)
             res.status(500).send({
                 success: false,
                 message: err.message
             })
         })
+    } else {
+        let key = {
+            active: true
+        }
+        if(req.body.type !== 'all') {
+            key['hashTag'] = req.body.type
+        }
+
+        if(req.body.ownerId !== null) {
+            key['ownerId'] = req.body.ownerId
+        }
+        await postModel.find(key).then(posts => {
+            if(posts.length) {
+    
+                const postList = []
+                posts.forEach(post => {
+                    post.images = []
+                    if(post.title === null) post.title = 'Bài đăng không có tiêu đề'
+                    postList.push(post)
+                })
+    
+                res.status(200).send({
+                    success: true,
+                    message: 'Lấy bài đăng thành công',
+                    postList: postList
+                })
+            } else {
+                res.status(200).send({
+                    success: false,
+                    message: 'Không tìm thấy bài đăng'
+                })
+            }
+        }).catch(err => {
+            console.log(err)
+            res.status(500).send({
+                success: false,
+                message: err.message
+            })
+        })
+    }
 }
 
 let createPost = async (req, res) => {
     try {
-        const newPost = postModel(req.body.post)
-        newPost.createDate = Date.now()
-        newPost.active = true
+        let postContent = null
+        if(req.body.hashTag === 'milk') postContent = getMilkDonationPostContent(req.body.amount)
+        else postContent = req.body.content
 
-        if(Number(req.body.post.amount)) {
-            newPost.title = 'Bài đăng cho sữa'
-        }
+        const newPost = postModel({
+            active: true,
+            ownerMode: req.body.userRole,
+            ownerId: req.body.userId,
+            ownerName: req.body.ownerName,
+            hashTag: req.body.hashTag,
+            title: req.body.title,
+            amount: req.body.amount,
+            content: postContent,
+            images: req.body.images,
+            lat: req.body.lat,
+            lng: req.body.lng,
+            createDate: Date.now()
+        })
 
         await newPost.save()
 
@@ -184,68 +235,40 @@ let createPost = async (req, res) => {
     }
 }
 
-let deletePost = async (req, res) => {
-    await postModel.findByIdAndDelete({
-        _id: req.body.postId
-    }).then(async (post) => {
-        if (post) {
-            res.status(200).send({
-                success: true,
-                message: 'Xóa bài đăng thành công'
-            })
-        } else {
-            res.status(200).send({
-                success: false,
-                message: 'Không tìm thấy bài đăng'
-            })
-        }
-    }).catch((err) => {
-        return res.status(500).send({
-            success: false,
-            message: err.message
-        })
-    })
-}
-
 let updatePost = async (req, res) => {
     await postModel.findByIdAndUpdate({
         _id: req.body.post._id
     }, req.body.post)
-    .then(post => {
-        if(post) {
-            res.status(200).send({
-                success: true,
-                message: 'Bài đăng đã được cập nhật'
-            })
-        } else {
-            res.status(200).send({
-                success: false,
-                message: 'Không tìm thấy bài đăng'
-            })
-        }
-    })
-    .catch(err => {
-        console.log(err)
-        res.status(500).send({
-            success: false,
-            message: err.message
+        .then(async post => {
+            if (post) {
+                if(post.hashTag === 'milk') {
+                    post.content = getMilkDonationPostContent(req.body.post.amount)
+                    await post.save()
+                }
+                res.status(200).send({
+                    success: true,
+                    message: 'Bài đăng đã được cập nhật'
+                })
+            } else {
+                res.status(200).send({
+                    success: false,
+                    message: 'Không tìm thấy bài đăng'
+                })
+            }
         })
-    })
+        .catch(err => {
+            console.log(err)
+            res.status(500).send({
+                success: false,
+                message: err.message
+            })
+        })
 }
 
 let getPost = async (req, res) => {
-
-    if (req.body.postId.length < 24) {
-        return res.status(200).send({
-            success: false,
-            message: 'Bài đăng không tồn tại',
-            post: null
-        })
-    }
-
     await postModel.findById({
-        _id: new mongoose.Types.ObjectId(req.body.postId)
-    }).then(async (post) => {
+        _id: req.body.postId
+    }).then(post => {
         if (post) {
             res.status(200).send({
                 success: true,
@@ -268,12 +291,41 @@ let getPost = async (req, res) => {
     })
 }
 
+const switchPost = async (req, res) => {
+    try {
+        const post = await postModel.findById({
+            _id: req.body.postId
+        })
+
+        if(post) {
+            post.active = !post.active
+            await post.save()
+
+            res.status(200).send({
+                success: true,
+                message: 'Cập nhật thành công'
+            })
+        } else {
+            res.status(200).send({
+                success: false,
+                message: 'Bài đăng không tồn tại'
+            })
+        }
+    } catch (err) {
+        console.log(err)
+        res.status(500).send({
+            success: false,
+            message: err.message
+        })
+    }
+}
+
 module.exports = {
     getAllUserPost,
     getUserPost,
     getAllPost,
     createPost,
-    deletePost,
     updatePost,
-    getPost
+    getPost,
+    switchPost
 }

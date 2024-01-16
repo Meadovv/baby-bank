@@ -9,8 +9,10 @@ const Recommend = ({ title, seeMore, getLink }) => {
 
   const navigate = useNavigate()
   const [postList, setPostList] = useState()
+  const [loading, setLoading] = useState(false)
 
   const getPost = async () => {
+    setLoading(true)
     await axios.get(getLink)
     .then(res => {
         if (res.data.success) {
@@ -21,6 +23,7 @@ const Recommend = ({ title, seeMore, getLink }) => {
         console.log(err)
         message.error(err.message)
     })
+    setLoading(false)
   }
 
   useEffect(() => {
@@ -29,23 +32,17 @@ const Recommend = ({ title, seeMore, getLink }) => {
 
   return (
     <div className="list-container">
-      <div className="row">
-        <Divider orientation="left" style={{
-          borderColor: 'black'
-        }}>
-          <h2 style={{
-            textTransform: 'uppercase'
-          }}>{title}</h2>
-        </Divider>
-        <PostList posts={postList} columns={3} />
-        <div style={{
-          display: 'flex',
-          justifyContent: 'center'
-        }}>
-          <Button style={{
-            margin: 20
-          }} size="large" onClick={() => { navigate(seeMore) }}>Xem Thêm</Button>
+      <div className="title-container">
+        <div className="title">
+          {title}
         </div>
+        <div className="line"></div>
+      </div>
+      <PostList posts={postList} loading={loading} type='post'/>
+      <div className="post-list-footer">
+        <Button type='primary' size='large' onClick={() => {
+          navigate(seeMore)
+        }}>Xem Thêm</Button>
       </div>
     </div>
   )

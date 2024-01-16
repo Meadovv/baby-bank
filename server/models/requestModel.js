@@ -7,22 +7,16 @@ const requestSchema = new mongoose.Schema({
     to: {
         type: {},
     },
-    type: {
-        type: String,
-    },
-    content: {
+    data: {
         type: {}
     },
     status: {
         type: String,
     },
-    appointmentId: {
-        type: String,
-    },
     createDate: {
         type: Number
     }
-})
+}, { versionKey: false })
 
 const requestModel = mongoose.model('requests', requestSchema)
 

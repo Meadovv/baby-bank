@@ -22,9 +22,9 @@ const Carousel = () => {
     }, [])
 
     return (
-        <div ref={carouselRef} className="carousel">
-            <div className="aspect-w-16 aspect-h-9 carousel-image">
-                <img src={images[currentIndex]} alt="carousel" />
+        <div className='carousel-container'>
+            <div ref={carouselRef} className="carousel">
+                <img className='carousel-image' src={images[currentIndex]} alt="carousel" />
             </div>
         </div>
     )

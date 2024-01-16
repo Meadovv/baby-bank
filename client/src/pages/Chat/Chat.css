@@ -1,0 +1,151 @@
+.chat-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    overflow: hidden;
+}
+
+.chat-view-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    align-items: center;
+    width: 80%;
+    padding: 0 1rem;
+}
+
+.chat-list-container {
+    width: 20%;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.chat-list-container.activated {
+    display: flex;
+}
+
+.chat-list-container.deactivated {
+    display: flex;
+}
+
+.chat-view {
+    display: flex;
+    flex-direction: column;
+    height: 80vh;
+    width: 100%;
+    overflow: auto;
+}
+
+.chat-reply {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.chat-item {
+    display: flex;
+}
+
+.chat-item.left {
+    justify-content: flex-start;
+}
+
+.chat-item.right {
+    justify-content: flex-end;
+}
+
+.chat-item-content {
+    width: 50%;
+    padding: 1rem;
+    margin: 1rem;
+    border-radius: 1rem;
+    background-color: #f1f1f1;
+}
+
+.chat-item-content-message {
+    text-align: justify;
+    line-height: 1.5;
+}
+
+.chat-item-content-date {
+    text-align: right;
+    font-size: 0.8rem;
+    color: gray;
+}
+
+.chat-list-item {
+    display: flex;
+    flex-direction: column;
+    width: 95%;
+    padding: 1rem;
+    margin: 0.5rem;
+    border-radius: 1rem;
+    background-color: #f1f1f1;
+    cursor: pointer;
+}
+
+.chat-list-item-header {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.chat-list-item-header-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-right: 1rem;
+}
+
+.chat-list-item-header-tag {
+    font-size: 0.8rem;
+    padding: 0.5rem;
+    color: white;
+    background-color: var(--primary-color);
+    border-radius: 10px;
+}
+
+.chat-list-item-content {
+    font-size: 0.8rem;
+    text-align: justify;
+    line-height: 1.5;
+    color: rgb(80, 80, 80);
+}
+
+.chat-list-item-date {
+    text-align: right;
+    font-size: 0.8rem;
+    color: gray;
+}
+
+@media screen and (max-width: 1000px) {
+    .chat-view {
+        width: 90%;
+    }
+
+    .chat-reply {
+        width: 90%;
+    }
+
+    .chat-item-content {
+        width: 60%;
+    }
+
+    .chat-container {
+        flex-direction: column;
+    }
+
+    .chat-list-container {
+        width: 90%;
+    }
+
+    .chat-view-container {
+        width: 100%;
+        padding: 0 0;
+    }
+
+    .chat-list-container.activated {
+        display: flex;
+    }
+    
+    .chat-list-container.deactivated {
+        display: none;
+    }
+}

@@ -1,67 +1,158 @@
 const chatModel = require('../models/chatModel')
+const userModel = require('../models/userModel')
+const mongoose = require('mongoose')
 
-const loadHistory = async (req, res) => {
-
-    await chatModel.find({
-        $or: [
-            {
-                from: req.body.targetId ? req.body.targetId : req.body.userId
-            },
-            {
-                to: req.body.targetId ? req.body.targetId : req.body.userId
-            }
-        ]
-    }).then(async (records) => {
-        let message = []
-        for(let i = 0; i < records.length; ++i) {
-            if(records[i].to === req.body.userId) {
-                message.push({
-                    key: records[i].createDate,
-                    role: 'bot',
-                    content: records[i].message
-                })
-            } else {
-                message.push({
-                    key: records[i].createDate,
-                    role: 'user',
-                    content: records[i].message
-                })
-            }
-            records[i].status = 'read'
-            await records[i].save()
+const getChatHistory = async (req, res) => {
+    try {
+        if(req.body.id[0] === null || req.body.id[1] === null) {
+            return res.status(200).send({
+                success: false,
+                message: 'Missing id!'
+            })
         }
 
-        res.status(200).send({
-            success: true,
-            message: message
+        const id0 = new mongoose.Types.ObjectId(req.body.id[0])
+        const id1 = new mongoose.Types.ObjectId(req.body.id[1])
+
+        const chatHistory = await chatModel.find({
+            $or: [
+                {'from._id': id0, 'to._id': id1},
+                {'from._id': id1, 'to._id': id0},
+            ]
         })
-    }).catch(err => {
-        res.status(500).send({
+
+        let chat = null
+
+        if(chatHistory.length === 0) {
+
+            const fromUser = await userModel.findById({_id: req.body.id[0]})
+            const toUser = await userModel.findById({_id: req.body.id[1]})
+
+
+            const newChat = new chatModel({
+                active: false,
+                from: {
+                    _id: fromUser._id,
+                    name: fromUser.name,
+                    mode: fromUser.mode
+                },
+                to: {
+                    _id: toUser._id,
+                    name: toUser.name,
+                    mode: toUser.mode
+                },
+                data: [],
+                createDate: Date.now()
+            })
+
+            await newChat.save()
+
+            chat = newChat
+        } else {
+            chat = chatHistory[0]
+        }
+
+
+
+        return res.status(200).send({
+            success: true,
+            message: 'Chat history found!',
+            chat: chat
+        })
+    } catch (err) {
+        console.log(err)
+        return res.status(500).send({
             success: false,
             message: err.message
         })
-    })
+    }
 }
 
-const sendChat = async (req, res) => {
+const sendMessage = async (req, res) => {
+    try {
+        const chat = await chatModel.findById({
+            _id: req.body.chatId
+        })
 
-    const newChat = new chatModel({
-        from: req.body.userId,
-        to: req.body.to,
-        message: req.body.question,
-        status: 'unread',
-        createDate: Date.now()
-    })
+        if(!chat) {
+            return res.status(200).send({
+                success: false,
+                message: 'Chat not found!'
+            })
+        }
 
-    await newChat.save()
+        chat.data.push(req.body.message)
 
-    res.status(200).send({
-        success: true,
-        message: 'Phản hồi của bạn đã được lưu lại. Chúng tôi sẽ liên lạc lại với bạn qua Email. Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi.'
-    })
+        await chat.save()
+
+        return res.status(200).send({
+            success: true,
+            message: 'Message sent!',
+            chat: chat
+        })
+    } catch (err) {
+        console.log(err)
+        return res.status(500).send({
+            success: false,
+            message: err.message
+        })
+    }
+}
+
+const getChatList = async (req, res) => {
+    try {
+        const userId = new mongoose.Types.ObjectId(req.body.userId)
+        const chats = await chatModel.find({
+            $or: [
+                {'from._id': userId},
+                {'to._id': userId},
+            ]
+        })
+
+        if(!chats.length) {
+            return res.status(200).send({
+                success: false,
+                message: 'Chat list not found!'
+            })
+        }
+
+        const chatList = []
+
+        chats.forEach(chat => {
+            if(!chat.data.length) return
+            if(chat.from._id.toString() === userId.toString()) {
+                chatList.push({
+                    _id: chat.to._id,
+                    name: chat.to.name,
+                    mode: chat.to.mode,
+                    last: chat.data[chat.data.length - 1]
+                })
+            } else {
+                chatList.push({
+                    _id: chat.from._id,
+                    name: chat.from.name,
+                    mode: chat.from.mode,
+                    last: chat.data[chat.data.length - 1]
+                })
+            }
+        })
+
+        return res.status(200).send({
+            success: true,
+            message: 'Chat list found!',
+            chats: chatList
+        })
+    } catch (err) {
+        console.log(err)
+        return res.status(500).send({
+            success: false,
+            message: err.message
+        })
+    }
 }
 
 module.exports = {
-    sendChat,
-    loadHistory
+    getChatHistory,
+    sendMessage,
+    getChatList
 }

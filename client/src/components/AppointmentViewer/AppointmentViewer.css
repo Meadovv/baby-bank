@@ -1,0 +1,97 @@
+.appointment-view-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.appointment-list-view {
+    width: 30%;
+    padding: 0 1rem;
+}
+
+.appointment-current-view {
+    width: 70%;
+    padding: 0 1rem;
+}
+
+.appointment-card-container {
+    padding: 1rem;
+    margin: 1rem 0;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.appointment-card-container:hover {
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+}
+
+
+.appointment-card-name {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.appointment-card-item {
+    margin: 1rem;
+}
+
+.appointment-card-date {
+    font-size: 1rem;
+    font-weight: 500;
+    color: gray;
+}
+
+.appointment-card-status {
+    padding: 0.5rem 1rem;
+    background-color: var(--primary-color);
+    color: white;
+    width: fit-content;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+.appointment-card-sticker {
+    width: 100%;
+    padding: 0.5rem;
+    background-color: #FFD700;
+    border-radius: 10px;
+    width: fit-content;
+}
+
+.appointment-current-view-container {
+    flex-direction: column;
+    margin-top: 1rem;
+    margin-left: 1rem;
+}
+
+.appointment-current-card-item {
+    margin: 0.5rem;
+    font-size: 1.2rem;
+}
+
+
+@media screen and (max-width: 1000px) {
+    .appointment-view-container {
+        flex-direction: column;
+    }
+
+    .appointment-list-view {
+        width: 90%;
+        padding: 0 1rem;
+    }
+
+    .appointment-current-view {
+        width: 90%;
+        padding: 0 1rem;
+    }
+
+    .activate {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .deactivate {
+        display: none;
+    }
+}

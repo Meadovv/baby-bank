@@ -1,46 +1,71 @@
-.my-container {
-    background-image: url("background.jpg");
-    min-height: 100vh;
+.head-logo {
+    display: none;
+}
+
+.quick-menu-container {
+    display: none;
+}
+
+.welcome-container {
+    background-image: url('hero.jpg');
     display: flex;
+    width: 100%;
+    height: 100vh;
+    justify-content: flex-start;
+    align-items: flex-start;
 }
 
-.welcome-block {
-    margin: 15vh 15vh;
+.welcome {
+    display: none;
 }
 
-.main-welcome {
-    font-size: 55px;
-    margin: 20px 0;
-    text-transform: uppercase;
-    color: #00308F;
-}
+@media screen and (max-width: 1000px) {
+    .home-container {
+        display: flex;
+        width: 100%;
+        flex-direction: column;
+    }
+    
+    .head-container {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .head-logo {
+        display: block;
+        width: 20%;
+        padding: 0.5rem;
+    }
 
-.sub-welcome {
-    font-size: 25px;
-    font-weight: 500;
-    letter-spacing: 3px;
-    color: #00308F;
-}
+    .quick-menu-container {
+        display: flex;
+        width: 30%;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem;
+    }
+    
+    .quick-menu-item {
+        font-size: 1.5rem;
+        color: var(--primary-color);
+        cursor: pointer;
+    }
 
-.hero-button {
-    padding: 17px 30px;
-    background-color: #00308F;
-    color: #ffffff;
-    font-weight: 600;
-    border: none;
-    margin: 30px 10px 0 0;
-    border-radius: 3px;
-    cursor: pointer;
-    box-shadow: 0 24px 36px -11px rgb(0 0 0 / 9%);
-    transition: 0.5s;
-}
+    .welcome-container {
+        display: flex;
+        width: 100%;
+        height: auto;
+        justify-content: center;
+        align-items: center;
+        background-image: none;
+    }
 
-.hero-button i {
-    margin-left: 20px;
-}
-
-.hero-button:hover {
-    box-shadow: none;
-    color: #00308F;
-    background-color: #ffffff;
+    .welcome {
+        display: block;
+        font-size: 1rem;
+        font-weight: bold;
+        padding: 0.5rem;
+        color: var(--primary-color);
+    }
 }

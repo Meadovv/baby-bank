@@ -1,16 +1,19 @@
 import PostCard from "../PostCard/PostCard"
-import { Row } from 'antd'
+import { Button } from 'antd'
 import Spinner from '../Spinner'
+import './PostList.css'
 
-const PostList = ({ posts, columns, loading }) => {
+const PostList = ({ posts, loading, type }) => {
 
     return (
         loading ? <Spinner /> : 
-        <Row gutter={[16, 16]}>
+        <div className="post-list-container">
             {
-                posts && posts.map((post, index) => <PostCard key={index} post={post} width={24 / columns}/>)
-            }         
-        </Row>
+                posts && posts.map(post => (
+                    <PostCard post={post} key={post._id} type={type}/>
+                ))
+            }
+        </div>
     )
 }
 

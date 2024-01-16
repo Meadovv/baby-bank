@@ -1,0 +1,97 @@
+.storage-view-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.storage-list-view {
+    width: 30%;
+    padding: 0 1rem;
+}
+
+.storage-current-view {
+    width: 70%;
+    padding: 0 1rem;
+}
+
+.storage-card-container {
+    padding: 1rem;
+    margin: 1rem 0;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.storage-card-container:hover {
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+}
+
+
+.storage-card-name {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.storage-card-item {
+    margin: 1rem;
+}
+
+.storage-card-date {
+    font-size: 1rem;
+    font-weight: 500;
+    color: gray;
+}
+
+.storage-card-status {
+    padding: 0.5rem 1rem;
+    background-color: var(--primary-color);
+    color: white;
+    width: fit-content;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+.storage-card-sticker {
+    width: 100%;
+    padding: 0.5rem;
+    background-color: #FFD700;
+    border-radius: 10px;
+    width: fit-content;
+}
+
+.storage-current-view-container {
+    flex-direction: column;
+    margin-top: 1rem;
+    margin-left: 1rem;
+}
+
+.storage-current-card-item {
+    margin: 0.5rem;
+    font-size: 1.2rem;
+}
+
+
+@media screen and (max-width: 1000px) {
+    .storage-view-container {
+        flex-direction: column;
+    }
+
+    .storage-list-view {
+        width: 90%;
+        padding: 0 1rem;
+    }
+
+    .storage-current-view {
+        width: 90%;
+        padding: 0 1rem;
+    }
+
+    .activate {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .deactivate {
+        display: none;
+    }
+}

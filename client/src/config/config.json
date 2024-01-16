@@ -4,5 +4,10 @@
     "MILK_MAX_DONATION": 2000,
     "MILK_STEP_DONATION": 10,
     "MAX_DISTANCE": 20,
-    "MIN_DISTANCE": 0
+    "MIN_DISTANCE": 0,
+    "FACEBOOK_LINK": "https://www.facebook.com/babybankapp",
+    "INSTAGRAM_LINK": "https://www.instagram.com/babybankapp",
+    "GOOGLE_LINK": "https://plus.google.com/babybankapp",
+    "YOUTUBE_LINK": "https://www.youtube.com/babybankapp",
+    "PHONE_NUMBER": "+201000000000"
 }

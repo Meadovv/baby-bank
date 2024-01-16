@@ -4,10 +4,14 @@ import { message, Button, Input } from 'antd'
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { showLoading, hideLoading } from '../../reducer/actions/alertSlice';
+import "./Login.css";
+import { useNavigate } from 'react-router-dom';
+
 
 export default function Login() {
 
     const dispatch = useDispatch()
+    const navigate = useNavigate()
     const [form, setForm] = useState({
         username: null,
         password: null
@@ -38,56 +42,46 @@ export default function Login() {
     }
 
     return (
-        <div className='grid grid-cols-1 sm:grid-cols-2 h-screen w-full'>
-            <div className='hidden sm:block'>
-                <img className='w-full h-full object-cover' src='/images/login.png' alt="login-background"/>
+        <div className='container'>
+            <div className='side-background-container'>
+                <img className='side-background' src='/images/login.png' alt='background'/>
             </div>
-            <div className='bg-white-100 flex flex-col justify-center'>
-                <div className='flex justify-center items-center'>
-                    <img className='w-50 h-auto max-w-xl' alt='logo' src='/images/logo.png' style={{
-                    width: '30%'}}/>
+            <div className='form-container'>
+                <div className='logo-container'>
+                    <img className='auth-logo' src='/images/logo.png' alt='logo'/>
                 </div>
-                <form className='max-w-[400px] w-full mx-auto bg-white p-4'>
-                    <h2 className='text-4xl font-bold text-center py-6'>Đăng nhập</h2>
-                    <div className='flex flex-col py-2'>
-                        <label>Email</label>
-                        <Input
-                            size='large'
-                            onChange={(value) => {
-                                setForm({...form,
-                                    username: value.target.value
-                                })
-                            }}
-                        />
-                    </div>
-                    <div className='flex flex-col py-2'>
-                        <label>Mật khẩu</label>
-                        <Input.Password
-                            size='large'
-                            onChange={(value) => {
-                                setForm({...form,
-                                    password: value.target.value
-                                })
-                            }}
-                        />
-                    </div>
-                    <Button 
-                        type='primary'
-                        size='large'
-                        block
-                        onClick={handleLogin}
-                        style={{
-                            marginTop: 10
-                        }}
-                    >Đăng nhập</Button>
-                    <div style={{
-                        marginTop: 10,
-                        display: 'flex',
-                        justifyContent: 'flex-end'
+                <div className='form'>
+                    <h2>Đăng nhập</h2>
+                    <div className='form-item' style={{
+                        display: 'flex'
                     }}>
-                        <Link to='/register' style={{ textDecoration: 'none' }}>Tạo tài khoản mới</Link>
+                        <label className='form-label'>Tên đăng nhập</label>
+                        <Input size='large' onChange={(e) => setForm({...form, username: e.target.value})}/>
                     </div>
-                </form>
+
+                    <div className='form-item' style={{
+                        display: 'flex'
+                    }}>
+                        <label className='form-label'>Mật khẩu</label>
+                        <Input.Password size='large' onChange={(e) => setForm({...form, password: e.target.value})}/>
+                        <label className='form-label'><strong style={{
+                            color: 'blue',
+                            textDecoration: 'underline',
+                            cursor: 'pointer'
+                        }} onClick={() => navigate('/forgot-password')}>Quên mật khẩu</strong></label>
+                    </div>
+
+                    <div className='form-item' style={{
+                        display: 'flex'
+                    }}>
+                        <Button type='primary' size='large' onClick={handleLogin}>Đăng nhập</Button>
+                        <label className='form-label'>Chưa có tài khoản? <strong style={{
+                            color: 'blue',
+                            textDecoration: 'underline',
+                            cursor: 'pointer'
+                        }} onClick={() => navigate('/register')}>Đăng ký</strong></label>
+                    </div>
+                </div>
             </div>
         </div>
     )
