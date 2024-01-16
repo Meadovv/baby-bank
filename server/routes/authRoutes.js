@@ -6,7 +6,8 @@ const {
     getProfileData,
     updateUser,
     recovery,
-    forgot
+    forgot,
+    updateLocation
 } = require('../controllers/authCtrl')
 
 const { authMiddleware } = require('../middleware/authMiddleware')
@@ -18,6 +19,8 @@ router.post('/login', loginController)
 router.post('/register', registerController)
 
 router.post('/update-user-data', authMiddleware, updateUser)
+
+router.post('/update-user-location', authMiddleware, updateLocation)
 
 router.post('/get-user-data', authMiddleware, getUserData)
 

@@ -26,6 +26,46 @@ function ChangeInformationModal({ visible, onCancel, onOk, type }) {
     const field = type?.split('-')[0]
     const mode = type?.split('-')[1]
     const [value, setValue] = useState(null)
+    const [loading, setLoading] = useState(false)
+
+    const handleGetLocation = () => {
+        // Kiểm tra xem trình duyệt có hỗ trợ Geolocation không
+        if ('geolocation' in navigator) {
+          navigator.geolocation.getCurrentPosition(
+            // Hàm callback khi lấy được vị trí
+            async (position) => {
+              const { latitude, longitude } = position.coords;
+              setLoading(true)
+              await axios.post('/api/v1/authentication/update-user-location',
+              {
+                lat: latitude,
+                lng: longitude
+              },
+              {
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem('token')
+                },
+              }).then(res => {
+                if(res.data.success) {
+                    message.success(res.data.message)
+                } else {
+                    message.error(res.data.message)
+                }
+              }).catch(err => {
+                console.log(err)
+                message.error(err.message)
+              })
+              setLoading(false)
+            },
+            // Hàm callback khi không thể lấy được vị trí
+            (error) => {
+              message.error(error.message)
+            }
+          );
+        } else {
+          message.error('Trình duyệt không hỗ trợ Geolocation.')
+        }
+      };
 
     useEffect(() => {
         setValue(null)
@@ -42,7 +82,7 @@ function ChangeInformationModal({ visible, onCancel, onOk, type }) {
             onOk={() => {
                 onOk(field, {
                     type: mode,
-                    value: value
+                    value: value === null ? 'Chưa cập nhật' : value
                 })
             }}
             okText='Cập nhật'
@@ -66,9 +106,18 @@ function ChangeInformationModal({ visible, onCancel, onOk, type }) {
                 </h4>
                 {
                     mode === 'value' ? 
-                    <Input onChange={(e) => {
+                    field === 'address' ? 
+                    <Input.Search 
+                        size='large' 
+                        onChange={(e) => {
+                            setValue(e.target.value)
+                        }}
+                        onSearch={() => handleGetLocation()}
+                        loading={loading}
+                    /> :
+                    <Input size='large' onChange={(e) => {
                         setValue(e.target.value)
-                    }}/> :
+                    }} /> :
                     <Select style={{
                         width: '100%'
                     }} onChange={(value) => {

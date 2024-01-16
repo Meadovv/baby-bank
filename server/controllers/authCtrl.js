@@ -193,6 +193,36 @@ const getProfileData = async (req, res) => {
     })
 }
 
+let updateLocation = async (req, res) => {
+    await userModel.findById({
+        _id: req.body.userId
+    }).then(async user => {
+        if(user) {
+            user.location.lat = req.body.lat
+            user.location.lng = req.body.lng
+
+            await user.save()
+
+            res.status(200).send({
+                success: true,
+                message: 'Cập nhật tọa độ thành công'
+            })
+
+        } else {
+            res.status(200).send({
+                success: false,
+                message: 'Không tìm thấy người dùng'
+            })
+        }
+    }).catch(err => {
+        console.log(err)
+        res.status(500).send({
+            success: false,
+            message: err.message
+        })
+    })
+}
+
 let updateUser = async (req, res) => {
     await userModel.findById({
         _id: req.body.userId
@@ -349,6 +379,7 @@ module.exports = {
     loginController,
     registerController,
     updateUser,
+    updateLocation,
     getUserData,
     getProfileData,
     recovery,
