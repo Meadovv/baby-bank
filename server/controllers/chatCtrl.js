@@ -122,7 +122,7 @@ const getChatList = async (req, res) => {
         if(!chats.length) {
             return res.status(200).send({
                 success: false,
-                message: 'Chat list not found!'
+                message: 'Không có đoạn hội thoại!'
             })
         }
 

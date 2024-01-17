@@ -99,7 +99,8 @@ export default function NotificationModal({ visible, onCancel, notificationList 
                                     {notification.message}
                                 </div>
                                 <div style={{
-                                    fontSize: '1rem'
+                                    fontSize: '1rem',
+                                    display: notification.appointmentId ? 'flex' : 'none'
                                 }}>
                                     ID Cuộc hẹn: {notification.appointmentId}
                                 </div>

@@ -7,7 +7,8 @@ const {
     updateUser,
     recovery,
     forgot,
-    updateLocation
+    updateLocation,
+    calling
 } = require('../controllers/authCtrl')
 
 const { authMiddleware } = require('../middleware/authMiddleware')
@@ -29,5 +30,7 @@ router.post('/get-profile-data', authMiddleware, getProfileData)
 router.get('/recovery/:token', recovery)
 
 router.post('/forgot', forgot)
+
+router.post('/calling', authMiddleware, calling)
 
 module.exports = router;

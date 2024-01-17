@@ -7,8 +7,11 @@ const storageSchema = new mongoose.Schema({
     owner: {
         type: String,
     },
-    data: {
-        type: {}
+    amount: {
+        type: Number,
+    },
+    note: {
+        type: String,
     },
     createDate: {
         type: Number

@@ -81,7 +81,9 @@ export default function Appointment() {
 
     return (
         <Layout>
-            <div className="explore-container">
+            <div className="explore-container" style={{
+                minHeight: '100vh'
+            }}>
                 <div className="title-container-center">
                     <div className="title">Cuộc hẹn</div>
                 </div>

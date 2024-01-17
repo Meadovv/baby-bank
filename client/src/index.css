@@ -19,7 +19,10 @@ i {
 .title-container-center {
   width: 100%;
   display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
+  margin-bottom: 1rem;
 }
 
 .title-container-center.title {

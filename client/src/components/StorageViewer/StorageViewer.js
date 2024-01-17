@@ -32,11 +32,10 @@ export default function StorageViewer({ storageList, loading }) {
                                     backgroundColor: current?._id === item._id ? '#89CFF0' : 'white',
                                 }} onClick={() => setCurrent(item)}>
                                     <div className='item-card-name item-card'>
-                                        Tài nguyên: {item.data.name}
+                                        {item?.action === 'add' ? 'Thêm vào' : 'Lấy ra'} : {item?.amount} ml
                                     </div>
-
                                     <div className='item-card-date item-card'>
-                                        {item?.action === 'add' ? 'Ngày thêm:' : 'Ngày lấy:'} {toDate(item.createDate)}
+                                        Thời gian: {toDate(item.createDate)}
                                     </div>
                                 </div>
                             )
@@ -63,24 +62,17 @@ export default function StorageViewer({ storageList, loading }) {
                         <div className='storage-current-view-container' style={{
                             display: current ? 'flex' : 'none',
                         }}>
+
                             <div className='storage-current-card-item' onClick={() => navigate(`/profile/${current?.from._id}`)}>
-                                {current?.action === 'add' ? 'Nhận từ:' : 'Lấy bởi:'} <strong>{current?.from.name}</strong>
+                                Số lượng: <strong>{current?.amount}</strong>
                             </div>
 
                             <div className='storage-current-card-item' onClick={() => navigate(`/profile/${current?.from._id}`)}>
-                                Tên tài nguyên: <strong>{current?.data.name}</strong>
+                                Ghi chú: <strong>{current?.note}</strong>
                             </div>
 
                             <div className='storage-current-card-item' onClick={() => navigate(`/profile/${current?.from._id}`)}>
-                                Số lượng: <strong>{current?.data.amount}</strong>
-                            </div>
-
-                            <div className='storage-current-card-item' onClick={() => navigate(`/profile/${current?.from._id}`)}>
-                                Đơn vị: <strong>{current?.data.unit}</strong>
-                            </div>
-
-                            <div className='storage-current-card-item' onClick={() => navigate(`/profile/${current?.from._id}`)}>
-                                Ghi chú: <strong>{current?.data.note}</strong>
+                                Thời gian: <strong>{toDate(current?.createDate)}</strong>
                             </div>
                         </div>
                     </div>

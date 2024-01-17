@@ -1,0 +1,46 @@
+.information-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 1rem;
+    width: 90%;
+}
+
+.information-total-container {
+    border: 2px solid gray;
+    padding: 2rem;
+    border-radius: 10px;
+    margin-bottom: 0;
+}
+
+.information-total-main-container {
+    font-size: 1.8rem;
+    font-weight: bold;
+    padding: 0.5rem;
+}
+
+.information-total-sub-container {
+    font-size: 1.5rem;
+}
+
+.information-sub-add {
+    padding: 0.5rem;
+    color: blue;
+}
+
+.information-sub-remove {
+    padding: 0.5rem;
+    color: red;
+}
+
+
+@media screen and (max-width: 800px) {
+    
+    .information-container {
+        flex-direction: column;
+    }
+
+    .information-total-container {
+        margin-bottom: 1rem;
+    }
+}

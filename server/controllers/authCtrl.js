@@ -7,6 +7,10 @@ const {
     sendResetMail
 } = require('./mailerCtrl')
 
+const {
+    createNotification
+} = require('./notificationCtrl')
+
 const loginController = async (req, res) => {
     try {
         const user = await userModel.findOne({
@@ -84,7 +88,7 @@ const registerController = async (req, res) => {
         const hashedPassword = await bcrypt.hash(req.body.user.password, salt);
 
         const newUser = new userModel({
-            active: false,
+            active: false,// active
             updated: false,
             name: req.body.user.name,
             username: req.body.user.email,
@@ -375,6 +379,51 @@ const forgot = async (req, res) => {
     }
 }
 
+const calling = async (req, res) => {
+    let userRadianLat = 0
+    let userRadianLng = 0
+
+    try {
+        userRadianLat = req.body.location.lat * 0.01745329252
+        userRadianLng = req.body.location.lng * 0.01745329252
+    } catch (err) {
+        userRadianLat = 0
+        userRadianLng = 0
+    }
+    try {
+        const userList = await userModel.find()
+        let userCount = 0
+        userList.forEach(async user => {
+            const lat = user.location.lat * 0.01745329252
+            const lng = user.location.lng * 0.01745329252
+            const distance = 
+                Math.round((6378 * Math.acos(Math.sin(userRadianLat) * Math.sin(lat) + Math.cos(userRadianLat) * Math.cos(lat) * Math.cos(lng - userRadianLng))))
+
+            if(Number(req.body.data.distance) !== 0 && distance > Number(req.body.data.distance)) return
+            if(user.mode !== 'individual') return
+
+            userCount = userCount + 1
+            await createNotification({
+                owner: user._id,
+                appointmentId: null,
+                message: req.body.data.note,
+                link: `/profile/${req.body.userId}`
+            })
+        })
+
+        res.status(200).send({
+            success: true,
+            message: `Đã gửi thông báo cho ${userCount} người`
+        })
+    } catch (err) {
+        console.log(err)
+        res.status(500).send({
+            success: false,
+            message: err.message
+        })
+    }
+}
+
 module.exports = {
     loginController,
     registerController,
@@ -383,5 +432,6 @@ module.exports = {
     getUserData,
     getProfileData,
     recovery,
-    forgot
+    forgot,
+    calling
 }

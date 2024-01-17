@@ -39,6 +39,13 @@ const createRequest = async (req, res) => {
             createDate: Date.now()
         })
 
+        await createNotification({
+            owner: toUser._id,
+            appointmentId: newRequest._id,
+            message: 'Bạn có cuộc hẹn mới.',
+            link: `/appointment?status=pending`
+        })
+
         await newRequest.save()
 
         return res.status(200).send({

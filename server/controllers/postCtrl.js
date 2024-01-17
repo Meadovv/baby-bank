@@ -155,7 +155,7 @@ let getAllPost = async (req, res) => {
                     const distance = 
                         Math.round((6378 * Math.acos(Math.sin(userRadianLat) * Math.sin(lat) + Math.cos(userRadianLat) * Math.cos(lat) * Math.cos(lng - userRadianLng))))
 
-                    if(Number(req.body.distance) !== 0 && distance > Number(req.body.distance)) return
+                    if(Number(req.body.filter.distance) !== 0 && distance > Number(req.body.filter.distance)) return
 
                     postList.push(user)
                 })
@@ -180,7 +180,8 @@ let getAllPost = async (req, res) => {
         })
     } else {
         let key = {
-            active: true
+            active: true,
+            amount: {$gt: req.body.filter.amount - 1}
         }
         if(req.body.type !== 'all') {
             key['hashTag'] = req.body.type
@@ -202,7 +203,7 @@ let getAllPost = async (req, res) => {
                     const distance = 
                         Math.round((6378 * Math.acos(Math.sin(userRadianLat) * Math.sin(lat) + Math.cos(userRadianLat) * Math.cos(lat) * Math.cos(lng - userRadianLng))))
 
-                    if(Number(req.body.distance) !== 0 && distance > Number(req.body.distance)) return
+                    if(Number(req.body.filter.distance) !== 0 && distance > Number(req.body.filter.distance)) return
 
                     postList.push(post)
                 })

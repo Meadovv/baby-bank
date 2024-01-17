@@ -1,6 +1,6 @@
 import Layout from "../../components/Layout/Layout";
 import "./Setting.css";
-import { Avatar, Menu, Button, Modal, Input, Select, message, Space } from "antd";
+import { Avatar, Menu, Button, Modal, Input, Select, message, Space, Slider, Form } from "antd";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from 'react-router-dom'
@@ -139,6 +139,8 @@ export default function Setting() {
     const [modalVisible, setModalVisible] = useState(false)
     const [type, setType] = useState(null)
     const navigate = useNavigate()
+    const [open, setOpen] = useState(false)
+    const [form] = Form.useForm()
 
     const [searchParams, setSearchParams] = useSearchParams()
 
@@ -366,6 +368,69 @@ export default function Setting() {
                                     }} onClick={() => {
                                         navigate('/manage/storage')
                                     }}>Quản lý kho</Button>
+
+                                    <Button type='primary' size='large' style={{
+                                        display: user?.mode === 'individual' ? 'none' : 'block',
+                                        marginTop: '0.5rem'
+                                    }} onClick={() => {
+                                        setOpen(true)
+                                    }}>Kêu gọi</Button>
+
+                                    <Modal
+                                        open={open}
+                                        onCancel={() => setOpen(false)}
+                                        onOk={async () => {
+                                            await axios.post('/api/v1/authentication/calling',
+                                            {
+                                                data: form.getFieldsValue(),
+                                                location: user?.location
+                                            },
+                                            {
+                                                headers: {
+                                                    Authorization: "Bearer " + localStorage.getItem('token')
+                                                },
+                                            }).then(res => {
+                                                if(res.data.success) {
+                                                    message.success(res.data.message)
+                                                } else {
+                                                    message.error(res.data.message)
+                                                }
+                                            }).catch(err => {
+                                                console.log(err)
+                                                message.error(err.message)
+                                            })
+                                            form.resetFields()
+                                            setOpen(false)
+                                        }}
+                                        title="Kêu gọi"
+                                        okButtonProps={{
+                                            size: 'large'
+                                        }}
+                                        cancelButtonProps={{
+                                            size: 'large'
+                                        }}
+                                    >
+                                        <Form
+                                            form={form}
+                                            layout="vertical"
+                                        >
+                                            <Form.Item
+                                                label='Khoảng cách tối đa'
+                                                name='distance'
+                                            >
+                                                <Slider
+                                                    min={0}
+                                                    max={50}
+                                                />
+                                            </Form.Item>
+                                            <Form.Item
+                                                label='Lời nhắn'
+                                                name='note'
+                                            >
+                                                <Input.TextArea />
+                                            </Form.Item>
+                                        </Form>
+                                    </Modal>
 
                                     <Button type='primary' size='large' style={{
                                         marginTop: '0.5rem'
