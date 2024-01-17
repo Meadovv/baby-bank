@@ -22,6 +22,7 @@ app.use('/api/v1/post', require('./routes/postRoutes'))
 app.use('/api/v1/request', require('./routes/requestRoutes'))
 app.use('/api/v1/storage', require('./routes/storageRoutes'))
 app.use('/api/v1/chat', require('./routes/chatRoutes'))
+app.use('/api/v1/notification', require('./routes/notificationRoute'))
 
 app.use('/api/v1/function', require('./routes/publicRoutes'))
 

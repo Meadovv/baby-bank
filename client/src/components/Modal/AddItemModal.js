@@ -78,7 +78,7 @@ export default function AddItemModal({ mode }) {
                 </div>
 
                 <div style={{
-                    display: mode === 'hospital' ? 'none' : 'flex',
+                    display: 'flex',
                     flexDirection: 'column',
                     marginTop: '1rem',
                     width: '100%'

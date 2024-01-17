@@ -173,19 +173,6 @@ export default function Chat() {
                                 )
                             })
                         }
-
-                        <div className="chat-list-item" onClick={() => navigate(`/chat/000000000000000000000000`)}>
-                            <div className="chat-list-item-header">
-                                <div className="chat-list-item-header-name">Trợ lý thông minh</div>
-                                <div className="chat-list-item-header-tag">Quản trị viên</div>
-                            </div>
-                            <div className="chat-list-item-content">
-                                {
-                                    'Xin chào, tôi có thể giúp gì cho bạn?'
-                                }
-                            </div>
-                        </div>
-
                     </div>
                     <div className="chat-view-container">
                         <div className="chat-view">
@@ -210,7 +197,7 @@ export default function Chat() {
                                 }}
                                 enterButton="Gửi"
                                 onSearch={() => {
-                                    sendMessage(messageInput, chat?._id, user?._id, chat?.from._id)
+                                    sendMessage(messageInput, chat?._id, user?._id, params.userId)
                                     setMessageInput(null)
                                 }}
                                 value={messageInput}

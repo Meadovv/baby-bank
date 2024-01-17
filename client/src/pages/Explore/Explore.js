@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import PostList from "../../components/PostList/PostList";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import { Select } from "antd";
+import { Select, Modal, Slider } from "antd";
 
 const typeList = [
     {
@@ -57,6 +57,8 @@ export default function Explore() {
     const [postList, setPostList] = useState([])
     const [loading, setLoading] = useState(false);
     const [searchParams, setSearchParams] = useSearchParams();
+    const [distance, setDistance] = useState(0)
+    const [visible, setVisible] = useState(false)
 
     const navigate = useNavigate();
 
@@ -67,6 +69,7 @@ export default function Explore() {
                 type: current,
                 ownerId: searchParams.get('userId'),
                 location: user?.location,
+                distance: distance
             },
             {
                 headers: {
@@ -96,9 +99,32 @@ export default function Explore() {
 
     return (
         <Layout>
+            <Modal
+                title="Bán kính tìm kiếm"
+                open={visible}
+                onCancel={() => setVisible(false)}
+                onOk={() => {
+                    setVisible(false)
+                    getPostList()
+                }}
+                okButtonProps={{
+                    size: 'large',
+                }}
+                cancelButtonProps={{
+                    size: 'large',
+                }}
+            >
+                <Slider
+                    value={distance}
+                    min={0}
+                    max={20}
+                    onChange={(value) => setDistance(value)}
+                />
+                <div>Đơn vị: Ki-lô-mét (km)</div>
+            </Modal>
             <div className="explore-container">
                 <div className="title-container-center">
-                    <div className="title">Khám phá</div>
+                    <div className="title">Khám phá <i class="fa-solid fa-location-crosshairs" onClick={() => setVisible(true)} /></div>
                 </div>
                 <div className="post-type-container">
                     {

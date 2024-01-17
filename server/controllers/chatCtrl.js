@@ -1,6 +1,7 @@
 const chatModel = require('../models/chatModel')
 const userModel = require('../models/userModel')
 const mongoose = require('mongoose')
+const axios = require('axios')
 
 const getChatHistory = async (req, res) => {
     try {
@@ -82,6 +83,15 @@ const sendMessage = async (req, res) => {
         }
 
         chat.data.push(req.body.message)
+
+        if(req.body.message.to.toString() === '000000000000000000000001') {
+            chat.data.push({
+                from: '000000000000000000000001',
+                to: req.body.userId,
+                message: 'Chức năng đang được phát triển',
+                createDate: Date.now()
+            })
+        }
 
         await chat.save()
 

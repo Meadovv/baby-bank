@@ -271,9 +271,13 @@ export default function Setting() {
                                             Địa chỉ
                                         </div>
                                         <div className="tab-content">
-                                            {
-                                                user?.location.address
-                                            }
+                                            Address: {user?.location.address}
+                                        </div>
+                                        <div className="tab-content">
+                                            Lat: {user?.location.lat}
+                                        </div>
+                                        <div className="tab-content">
+                                            Lng: {user?.location.lng}
                                         </div>
                                         <Button type='primary' size='large' style={{
                                             marginTop: '0.5rem'

@@ -2,7 +2,10 @@ const requestModel = require('../models/requestModel')
 const postModel = require('../models/postModel')
 const userModel = require('../models/userModel')
 const mongoose = require('mongoose')
-const storageModel = require('../models/storageModel')
+
+const {
+    createNotification
+} = require('./notificationCtrl')
 
 const createRequest = async (req, res) => {
     try {
@@ -148,29 +151,11 @@ const approveRequest = async (req, res) => {
         if (request.status === 'approved') {
 
             request.status = 'completed'
-            post.active = false
-
-            await post.save()
             await request.save()
 
-            if(request.data.type === 'donation') {
-                const newStorage = new storageModel({
-                    action: 'add',
-                    owner: request.to._id,
-                    from: {
-                        name: request.from.name,
-                        _id: request.from._id,
-                    },
-                    data: {
-                        name: request.data.name,
-                        amount: request.data.amount,
-                        unit: request.data.unit,
-                        note: request.data.note,
-                    },
-                    createDate: Date.now()
-                })
-
-                await newStorage.save()
+            if(post.ownerMode === 'individual') {
+                post.active = false
+                await post.save()
             }
 
             return res.status(200).send({
@@ -182,6 +167,15 @@ const approveRequest = async (req, res) => {
         request.status = 'approved'
 
         await request.save()
+
+        await createNotification({
+            owner: request.from._id,
+            message: 'Yêu cầu của bạn đã được chấp nhận',
+            appointmentId: request._id,
+            link: `/appointment?status=approved`,
+            status: 'unread',
+            createDate: Date.now()
+        })
 
         return res.status(200).send({
             success: true,
@@ -248,6 +242,15 @@ const rejectRequest = async (req, res) => {
         }
 
         request.status = 'rejected'
+
+        await createNotification({
+            owner: request.from._id,
+            message: 'Yêu cầu của bạn đã bị từ chối',
+            appointmentId: request._id,
+            link: `/appointment?status=rejected`,
+            status: 'unread',
+            createDate: Date.now()
+        })
 
         await request.save()
 

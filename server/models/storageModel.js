@@ -7,9 +7,6 @@ const storageSchema = new mongoose.Schema({
     owner: {
         type: String,
     },
-    from: {
-        type: {},
-    },
     data: {
         type: {}
     },

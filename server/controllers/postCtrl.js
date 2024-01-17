@@ -126,6 +126,19 @@ let getUserPost = async (req, res) => {
 }
 
 let getAllPost = async (req, res) => {
+    let userRadianLat = 0
+    let userRadianLng = 0
+
+    try {
+        userRadianLat = req.body.location.lat * 0.01745329252
+        userRadianLng = req.body.location.lng * 0.01745329252
+    } catch (err) {
+        userRadianLat = 0
+        userRadianLng = 0
+    }
+
+    console.log(req.body)
+
     if(req.body.type === 'organization' || req.body.type === 'hospital') {
         await userModel.find({
             active: true,
@@ -136,6 +149,14 @@ let getAllPost = async (req, res) => {
                 const postList = []
                 users.forEach(user => {
                     user.password = undefined
+
+                    const lat = user.location.lat * 0.01745329252
+                    const lng = user.location.lng * 0.01745329252
+                    const distance = 
+                        Math.round((6378 * Math.acos(Math.sin(userRadianLat) * Math.sin(lat) + Math.cos(userRadianLat) * Math.cos(lat) * Math.cos(lng - userRadianLng))))
+
+                    if(Number(req.body.distance) !== 0 && distance > Number(req.body.distance)) return
+
                     postList.push(user)
                 })
     
@@ -175,6 +196,14 @@ let getAllPost = async (req, res) => {
                 posts.forEach(post => {
                     post.images = []
                     if(post.title === null) post.title = 'Bài đăng không có tiêu đề'
+
+                    const lat = post.lat * 0.01745329252
+                    const lng = post.lng * 0.01745329252
+                    const distance = 
+                        Math.round((6378 * Math.acos(Math.sin(userRadianLat) * Math.sin(lat) + Math.cos(userRadianLat) * Math.cos(lat) * Math.cos(lng - userRadianLng))))
+
+                    if(Number(req.body.distance) !== 0 && distance > Number(req.body.distance)) return
+
                     postList.push(post)
                 })
     

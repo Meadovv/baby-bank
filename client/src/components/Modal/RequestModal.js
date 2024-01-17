@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Modal, Button, Input, InputNumber, message } from 'antd';
+import { Modal, Button, Input, InputNumber, Select, message } from 'antd';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 
@@ -74,7 +74,33 @@ export default function RequestModal({ amount, mode, userId, postId }) {
                 }}
             >
                 <div style={{
-                    display: mode === 'individual' && amount !== 0 ? 'none' : 'flex',
+                    display: (mode === 'hospital') ? 'flex' : 'none',
+                    flexDirection: 'column',
+                    marginTop: '1rem'
+                }}>
+                    <div style={{
+                        fontSize: '1rem',
+                    }}>
+                        Loại yêu cầu
+                    </div>
+                    <Select
+                        size='large'
+                        defaultValue='donation'
+                        onChange={(value) => setData({...data, type: value})}
+                        options={[
+                            {
+                                label: 'Cho sữa',
+                                value: 'donation'
+                            },
+                            {
+                                label: 'Nhận sữa',
+                                value: 'received'
+                            }
+                        ]}
+                    />
+                </div>
+                <div style={{
+                    display: (mode === 'individual' && amount !== 0) || (mode === 'hospital') ? 'none' : 'flex',
                     flexDirection: 'column',
                     marginTop: '1rem'
                 }}>

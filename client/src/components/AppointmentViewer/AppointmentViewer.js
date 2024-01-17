@@ -146,6 +146,10 @@ export default function AppointmentViewer({ appointmentList, loading }) {
                             </div>
 
                             <div className='appointment-current-card-item'>
+                                ID: <strong>{current?._id}</strong>
+                            </div>
+
+                            <div className='appointment-current-card-item'>
                                 Người gửi: <strong>{current?.from.name}</strong>
                             </div>
 
